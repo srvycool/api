@@ -1,0 +1,54 @@
+# General
+type Query {
+  survey(id: ID!): Survey!
+}
+
+type Mutation {
+  surveyMultipleChoiceCreate(
+    question: String!
+    answers: [String!]!
+  ): SurveyMultipleChoice!
+  surveyMultipleChoiceSubmit(
+    surveyID: ID!
+    answerID: ID!
+  ): SurveyMultipleChoice!
+
+  surveyTextareaCreate(question: String!): SurveyTextarea!
+  surveyTextareaSubmit(surveyID: ID!, text: String!): SurveyTextarea!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+# Survey Abstraction
+interface Survey {
+  id: ID!
+  label: String!
+}
+
+# Survey Multiple Choice
+type SurveyMultipleChoice implements Survey {
+  id: ID!
+  label: String!
+  answers: [SurveyMultipleChoiceAnswer!]!
+}
+
+type SurveyMultipleChoiceAnswer {
+  id: ID!
+  label: String!
+  votes: Int!
+}
+
+# Survey Textarea
+type SurveyTextarea implements Survey {
+  id: ID!
+  label: String!
+  submissions: [SurveyTextareSubmission!]!
+}
+
+type SurveyTextareSubmission {
+  id: ID!
+  text: String!
+}
