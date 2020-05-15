@@ -990,6 +990,15 @@ anymatch@^3.0.3:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
+appsync-template-tester@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/appsync-template-tester/-/appsync-template-tester-1.0.9.tgz#dcc792ff22de5512292bb55f3c9243a397d1e515"
+  integrity sha512-+aWbJFyw1Ovqgz1IH1HsYNM2+Oho1KCMDWroJpndv4vOGdH9diNKeFEzU3McKBCp9GzswUZMXbyb3s+6wPvjsw==
+  dependencies:
+    moment-timezone "^0.5.28"
+    uuid "^8.0.0"
+    velocityjs "^2.0.0"
+
 archiver-utils@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/archiver-utils/-/archiver-utils-2.1.0.tgz#e8a460e94b693c3e3da182a098ca6285ba9249e2"
@@ -3229,6 +3238,18 @@ mkdirp@0.x:
   dependencies:
     minimist "^1.2.5"
 
+moment-timezone@^0.5.28:
+  version "0.5.28"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.28.tgz#f093d789d091ed7b055d82aa81a82467f72e4338"
+  integrity sha512-TDJkZvAyKIVWg5EtVqRzU97w0Rb0YVbfpqyjgu6GwXCAohVRqwZjf4fOzDE6p1Ch98Sro/8hQQi65WDXW5STPw==
+  dependencies:
+    moment ">= 2.9.0"
+
+"moment@>= 2.9.0":
+  version "2.25.3"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.3.tgz#252ff41319cf41e47761a1a88cab30edfe9808c0"
+  integrity sha512-PuYv0PHxZvzc15Sp8ybUCoQ+xpyPWvjOuK72a5ovzp2LI32rJXOiIfyoFoYvG3s6EwwrdkMyWuRiEHSZRLJNdg==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -4522,6 +4543,11 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+velocityjs@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/velocityjs/-/velocityjs-2.0.0.tgz#3bc4dcb69545d2181aa7b4059e04412778b495b6"
+  integrity sha512-ykI/zV9K51pcxOvD8Nd3jzVtRHcgG9w/a/BxsHh4sDwV0ZJAjWJk7Wa2TM5c9MWtCMn+FgqePkQFajwAvcNx7w==
 
 verror@1.10.0:
   version "1.10.0"
