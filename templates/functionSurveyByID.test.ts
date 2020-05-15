@@ -1,5 +1,5 @@
 import Parser, { Context } from "appsync-template-tester";
-import { request, response } from "./function.surveyByID";
+import { request, response } from "./functionSurveyByID";
 
 describe("function:surveyByID", () => {
   describe("request", () => {
@@ -7,7 +7,7 @@ describe("function:surveyByID", () => {
       const parser = new Parser(request);
       const context = {
         stash: {
-          surveyID: "aa-bb-cc",
+          surveyID: "aa-bb-ccdjfbnj",
         },
       } as Context;
 

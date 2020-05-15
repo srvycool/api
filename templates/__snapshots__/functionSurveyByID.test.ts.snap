@@ -4,7 +4,7 @@ exports[`function:surveyByID request should match snapshot 1`] = `
 Object {
   "key": Object {
     "node": Object {
-      "S": "aa-bb-cc",
+      "S": "aa-bb-ccdjfbnj",
     },
     "path": Object {
       "S": "survey",

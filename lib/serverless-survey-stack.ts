@@ -12,17 +12,7 @@ import {
   BillingMode,
   StreamViewType,
 } from "@aws-cdk/aws-dynamodb";
-
-import * as functionSurveyByIDTpl from "../templates/function.surveyByID";
-import * as functionSurveyMultipleChoiceSubmitTpl from "../templates/function.surveyMultipleChoiceSubmit";
-import * as functionSurveyTextareaSubmitTpl from "../templates/function.surveyTextareaSubmit";
-import * as querySurveyTpl from "../templates/query.survey";
-import * as mutationSurveyMultipleChoiceCreateTpl from "../templates/mutation.surveyMultipleChoiceCreate";
-import * as mutationSurveyMultipleChoiceSubmitTpl from "../templates/mutation.surveyMultipleChoiceSubmit";
-import * as mutationSurveyTextareaSubmitTpl from "../templates/mutation.surveyTextareaSubmit";
-import * as mutationSurveyTextareaCreateTpl from "../templates/mutation.surveyTextareaCreate";
-import * as surveyMultipleChoiceAnswersTpl from "../templates/surveyMultipleChoice.answers";
-import * as surveyTextareaSubmissionTpl from "../templates/surveyTextarea.submissions";
+import * as templates from "../templates";
 
 export class ServerlessSurveyStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -70,8 +60,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
         dataSourceName: dataSource.name,
         functionVersion: "2018-05-29",
         name: "FunctionSurveyByID",
-        requestMappingTemplate: functionSurveyByIDTpl.request,
-        responseMappingTemplate: functionSurveyByIDTpl.response,
+        requestMappingTemplate: templates.functionSurveyByID.request,
+        responseMappingTemplate: templates.functionSurveyByID.response,
       }
     );
 
@@ -86,8 +76,10 @@ export class ServerlessSurveyStack extends cdk.Stack {
         dataSourceName: dataSource.name,
         functionVersion: "2018-05-29",
         name: "FunctionSurveyMultipleChoiceSubmit",
-        requestMappingTemplate: functionSurveyMultipleChoiceSubmitTpl.request,
-        responseMappingTemplate: functionSurveyMultipleChoiceSubmitTpl.response,
+        requestMappingTemplate:
+          templates.functionSurveyMultipleChoiceSubmit.request,
+        responseMappingTemplate:
+          templates.functionSurveyMultipleChoiceSubmit.response,
       }
     );
 
@@ -102,8 +94,9 @@ export class ServerlessSurveyStack extends cdk.Stack {
         dataSourceName: dataSource.name,
         functionVersion: "2018-05-29",
         name: "FunctionSurveyTextareaSubmit",
-        requestMappingTemplate: functionSurveyTextareaSubmitTpl.request,
-        responseMappingTemplate: functionSurveyTextareaSubmitTpl.response,
+        requestMappingTemplate: templates.functionSurveyTextareaSubmit.request,
+        responseMappingTemplate:
+          templates.functionSurveyTextareaSubmit.response,
       }
     );
 
@@ -118,8 +111,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
       pipelineConfig: {
         functions: [functionSurveyByID.getAtt("FunctionId").toString()],
       },
-      requestMappingTemplate: querySurveyTpl.request,
-      responseMappingTemplate: querySurveyTpl.response,
+      requestMappingTemplate: templates.querySurvey.request,
+      responseMappingTemplate: templates.querySurvey.response,
     });
 
     resolverQuerySurvey.addDependsOn(functionSurveyByID);
@@ -129,10 +122,12 @@ export class ServerlessSurveyStack extends cdk.Stack {
       typeName: "Mutation",
       fieldName: "surveyMultipleChoiceCreate",
       requestMappingTemplate: MappingTemplate.fromString(
-        mutationSurveyMultipleChoiceCreateTpl.request(surveyTable.tableName)
+        templates.mutationSurveyMultipleChoiceCreate.request(
+          surveyTable.tableName
+        )
       ),
       responseMappingTemplate: MappingTemplate.fromString(
-        mutationSurveyMultipleChoiceCreateTpl.response
+        templates.mutationSurveyMultipleChoiceCreate.response
       ),
     });
 
@@ -140,10 +135,10 @@ export class ServerlessSurveyStack extends cdk.Stack {
       typeName: "SurveyMultipleChoice",
       fieldName: "answers",
       requestMappingTemplate: MappingTemplate.fromString(
-        surveyMultipleChoiceAnswersTpl.request
+        templates.surveyMultipleChoiceAnswers.request
       ),
       responseMappingTemplate: MappingTemplate.fromString(
-        surveyMultipleChoiceAnswersTpl.response
+        templates.surveyMultipleChoiceAnswers.response
       ),
     });
 
@@ -151,10 +146,10 @@ export class ServerlessSurveyStack extends cdk.Stack {
       typeName: "Mutation",
       fieldName: "surveyTextareaCreate",
       requestMappingTemplate: MappingTemplate.fromString(
-        mutationSurveyTextareaCreateTpl.request
+        templates.mutationSurveyTextareaCreate.request
       ),
       responseMappingTemplate: MappingTemplate.fromString(
-        mutationSurveyTextareaCreateTpl.response
+        templates.mutationSurveyTextareaCreate.response
       ),
     });
 
@@ -172,8 +167,10 @@ export class ServerlessSurveyStack extends cdk.Stack {
             functionSurveyByID.getAtt("FunctionId").toString(),
           ],
         },
-        requestMappingTemplate: mutationSurveyMultipleChoiceSubmitTpl.request,
-        responseMappingTemplate: mutationSurveyMultipleChoiceSubmitTpl.response,
+        requestMappingTemplate:
+          templates.mutationSurveyMultipleChoiceSubmit.request,
+        responseMappingTemplate:
+          templates.mutationSurveyMultipleChoiceSubmit.response,
       }
     );
 
@@ -196,8 +193,9 @@ export class ServerlessSurveyStack extends cdk.Stack {
             functionSurveyByID.getAtt("FunctionId").toString(),
           ],
         },
-        requestMappingTemplate: mutationSurveyTextareaSubmitTpl.request,
-        responseMappingTemplate: mutationSurveyTextareaSubmitTpl.response,
+        requestMappingTemplate: templates.mutationSurveyTextareaSubmit.request,
+        responseMappingTemplate:
+          templates.mutationSurveyTextareaSubmit.response,
       }
     );
 
@@ -208,10 +206,10 @@ export class ServerlessSurveyStack extends cdk.Stack {
       typeName: "SurveyTextarea",
       fieldName: "submissions",
       requestMappingTemplate: MappingTemplate.fromString(
-        surveyTextareaSubmissionTpl.request
+        templates.surveyTextareaSubmission.request
       ),
       responseMappingTemplate: MappingTemplate.fromString(
-        surveyTextareaSubmissionTpl.response
+        templates.surveyTextareaSubmission.response
       ),
     });
   }
