@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`templates:mutationSurveyTextareaSubmit request should match snapshot 1`] = `Object {}`;
+
+exports[`templates:mutationSurveyTextareaSubmit response should match snapshot 1`] = `
+Object {
+  "id": "hh-ii-kk",
+}
+`;

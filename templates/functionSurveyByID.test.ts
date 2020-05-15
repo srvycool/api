@@ -1,13 +1,13 @@
 import Parser, { Context } from "appsync-template-tester";
 import { request, response } from "./functionSurveyByID";
 
-describe("function:surveyByID", () => {
+describe("templates:functionSurveyByID", () => {
   describe("request", () => {
     it("should match snapshot", () => {
       const parser = new Parser(request);
       const context = {
         stash: {
-          surveyID: "aa-bb-ccdjfbnj",
+          surveyID: "aa-bb-cc",
         },
       } as Context;
 

@@ -1,12 +1,13 @@
 export const request = (tableName: string) => `
+  #set($ctx.stash = {})
   $util.qr($ctx.stash.put("node", $util.autoId()))
 
   #set($entities = [])
-  $util.qr($entities.add($util.dynamodb.toMapValues({ "node": "$ctx.stash.node", "path": "survey", "id": "$ctx.stash.node", "label": "$ctx.args.question", "surveyType": "MULTIPLE_CHOICE" })))
+  $util.qr($entities.add($util.dynamodb.toMap({ "node": "$ctx.stash.node", "path": "survey", "id": "$ctx.stash.node", "label": "$ctx.arguments.question", "surveyType": "MULTIPLE_CHOICE" }).M))
 
-  #foreach($answer in $ctx.args.answers)
+  #foreach($answer in $ctx.arguments.answers)
     #set($answerID = $util.autoId())
-    $util.qr($entities.add($util.dynamodb.toMapValues({ "node": "$ctx.stash.node", "path": "answer#$answerID", "id": "$answerID", "label": "$answer", "votes": 0 })))
+    $util.qr($entities.add($util.dynamodb.toMap({ "node": "$ctx.stash.node", "path": "answer#$answerID", "id": "$answerID", "label": "$answer", "votes": 0 }).M))
   #end
 
   {
@@ -25,6 +26,6 @@ export const response = `
 
   {
     "id": "$ctx.stash.node",
-    "label": "$ctx.args.question"
+    "label": "$ctx.arguments.question"
   }
 `;

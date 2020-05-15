@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`templates:mutationSurveyMultipleChoiceCreate request should match snapshot 1`] = `
+Object {
+  "operation": "BatchPutItem",
+  "tables": Object {
+    "myFancyTable": Array [
+      Object {
+        "id": Object {
+          "S": "gg-hh-ii",
+        },
+        "label": Object {
+          "S": "Coffee?",
+        },
+        "node": Object {
+          "S": "gg-hh-ii",
+        },
+        "path": Object {
+          "S": "survey",
+        },
+        "surveyType": Object {
+          "S": "MULTIPLE_CHOICE",
+        },
+      },
+      Object {
+        "id": Object {
+          "S": "gg-hh-ii",
+        },
+        "label": Object {
+          "S": "Yes",
+        },
+        "node": Object {
+          "S": "gg-hh-ii",
+        },
+        "path": Object {
+          "S": "answer#gg-hh-ii",
+        },
+        "votes": Object {
+          "N": 0,
+        },
+      },
+      Object {
+        "id": Object {
+          "S": "gg-hh-ii",
+        },
+        "label": Object {
+          "S": "No",
+        },
+        "node": Object {
+          "S": "gg-hh-ii",
+        },
+        "path": Object {
+          "S": "answer#gg-hh-ii",
+        },
+        "votes": Object {
+          "N": 0,
+        },
+      },
+    ],
+  },
+  "version": "2018-05-29",
+}
+`;
+
+exports[`templates:mutationSurveyMultipleChoiceCreate response should match snapshot 1`] = `
+Object {
+  "id": "aa-bb-cc",
+  "label": "Coffee?",
+}
+`;
