@@ -12,7 +12,17 @@ import {
   BillingMode,
   StreamViewType,
 } from "@aws-cdk/aws-dynamodb";
-import { RemovalPolicy } from "@aws-cdk/core";
+
+import * as functionSurveyByIDTpl from "../templates/function.surveyByID";
+import * as functionSurveyMultipleChoiceSubmitTpl from "../templates/function.surveyMultipleChoiceSubmit";
+import * as functionSurveyTextareaSubmitTpl from "../templates/function.surveyTextareaSubmit";
+import * as querySurveyTpl from "../templates/query.survey";
+import * as mutationSurveyMultipleChoiceCreateTpl from "../templates/mutation.surveyMultipleChoiceCreate";
+import * as mutationSurveyMultipleChoiceSubmitTpl from "../templates/mutation.surveyMultipleChoiceSubmit";
+import * as mutationSurveyTextareaSubmitTpl from "../templates/mutation.surveyTextareaSubmit";
+import * as mutationSurveyTextareaCreateTpl from "../templates/mutation.surveyTextareaCreate";
+import * as surveyMultipleChoiceAnswersTpl from "../templates/surveyMultipleChoice.answers";
+import * as surveyTextareaSubmissionTpl from "../templates/surveyTextarea.submissions";
 
 export class ServerlessSurveyStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -30,7 +40,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
       billingMode: BillingMode.PAY_PER_REQUEST,
       stream: StreamViewType.NEW_IMAGE,
       serverSideEncryption: true,
-      removalPolicy: RemovalPolicy.DESTROY,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     const api = new GraphQLApi(this, "ServerlessSurvey", {
@@ -60,31 +70,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
         dataSourceName: dataSource.name,
         functionVersion: "2018-05-29",
         name: "FunctionSurveyByID",
-        requestMappingTemplate: `
-          {
-            "version" : "2017-02-28",
-            "operation" : "GetItem",
-            "key" : {
-              "node" : $util.dynamodb.toDynamoDBJson($ctx.stash.surveyID),
-              "path" : $util.dynamodb.toDynamoDBJson("survey")
-            }
-          }
-        `,
-        responseMappingTemplate: `
-          #if ($ctx.error)
-            $util.error($ctx.error.message, $ctx.error.type, null, $ctx.result.data.unprocessedKeys)
-          #end
-
-          #set($typeMapping = {})
-          $util.qr($typeMapping.put('MULTIPLE_CHOICE', 'SurveyMultipleChoice'))
-          $util.qr($typeMapping.put('TEXTAREA', 'SurveyTextarea'))
-
-          {
-            "__typename": "$typeMapping[$ctx.result.surveyType]",
-            "id": "$ctx.result.id",
-            "label": "$ctx.result.label"
-          }
-        `,
+        requestMappingTemplate: functionSurveyByIDTpl.request,
+        responseMappingTemplate: functionSurveyByIDTpl.response,
       }
     );
 
@@ -99,31 +86,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
         dataSourceName: dataSource.name,
         functionVersion: "2018-05-29",
         name: "FunctionSurveyMultipleChoiceSubmit",
-        requestMappingTemplate: `
-          {
-            "version" : "2017-02-28",
-            "operation" : "UpdateItem",
-            "key" : {
-              "node" : $util.dynamodb.toDynamoDBJson($ctx.stash.surveyID),
-              "path" : $util.dynamodb.toDynamoDBJson("answer#$ctx.stash.answerID")
-            },
-            "update" : {
-              "expression" : "ADD #votes :one",
-              "expressionNames": {
-                "#votes" : "votes"
-              },
-              "expressionValues": {
-                ":one" : { "N": 1 }
-              }
-            }
-          }
-        `,
-        responseMappingTemplate: `
-          #if ($ctx.error)
-            $util.error($ctx.error.message, $ctx.error.type, null, $ctx.result.data.unprocessedKeys)
-          #end
-          {}
-        `,
+        requestMappingTemplate: functionSurveyMultipleChoiceSubmitTpl.request,
+        responseMappingTemplate: functionSurveyMultipleChoiceSubmitTpl.response,
       }
     );
 
@@ -138,28 +102,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
         dataSourceName: dataSource.name,
         functionVersion: "2018-05-29",
         name: "FunctionSurveyTextareaSubmit",
-        requestMappingTemplate: `
-          #set($submissionID = $util.autoId())
-
-          {
-            "version" : "2017-02-28",
-            "operation" : "PutItem",
-            "key" : {
-              "node" : $util.dynamodb.toDynamoDBJson($ctx.stash.surveyID),
-              "path" : $util.dynamodb.toDynamoDBJson("submission#$submissionID")
-            },
-            "attributeValues" : {
-              "id": $util.dynamodb.toDynamoDBJson($submissionID),
-              "text": $util.dynamodb.toDynamoDBJson($ctx.stash.text)
-            }
-          }
-        `,
-        responseMappingTemplate: `
-          #if ($ctx.error)
-            $util.error($ctx.error.message, $ctx.error.type, null, $ctx.result.data.unprocessedKeys)
-          #end
-          {}
-        `,
+        requestMappingTemplate: functionSurveyTextareaSubmitTpl.request,
+        responseMappingTemplate: functionSurveyTextareaSubmitTpl.response,
       }
     );
 
@@ -174,13 +118,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
       pipelineConfig: {
         functions: [functionSurveyByID.getAtt("FunctionId").toString()],
       },
-      requestMappingTemplate: `
-          $util.qr($ctx.stash.put("surveyID", $ctx.args.surveyID))
-          {}
-        `,
-      responseMappingTemplate: `
-          $util.toJson($ctx.result)
-        `,
+      requestMappingTemplate: querySurveyTpl.request,
+      responseMappingTemplate: querySurveyTpl.response,
     });
 
     resolverQuerySurvey.addDependsOn(functionSurveyByID);
@@ -189,83 +128,34 @@ export class ServerlessSurveyStack extends cdk.Stack {
     dataSource.createResolver({
       typeName: "Mutation",
       fieldName: "surveyMultipleChoiceCreate",
-      requestMappingTemplate: MappingTemplate.fromString(`
-        $util.qr($ctx.stash.put("node", $util.autoId()))
-
-        #set($entities = [])
-        $util.qr($entities.add($util.dynamodb.toMapValues({ "node": "$ctx.stash.node", "path": "survey", "id": "$ctx.stash.node", "label": "$ctx.args.question", "surveyType": "MULTIPLE_CHOICE" })))
-
-        #foreach($answer in $ctx.args.answers)
-          #set($answerID = $util.autoId())
-          $util.qr($entities.add($util.dynamodb.toMapValues({ "node": "$ctx.stash.node", "path": "answer#$answerID", "id": "$answerID", "label": "$answer", "votes": 0 })))
-        #end
-
-        {
-          "version" : "2018-05-29",
-          "operation" : "BatchPutItem",
-          "tables" : {
-            "${surveyTable.tableName}": $utils.toJson($entities)
-          }
-        }
-      `),
-      responseMappingTemplate: MappingTemplate.fromString(`
-        #if ($ctx.error)
-          $util.error($ctx.error.message, $ctx.error.type, null, $ctx.result.data.unprocessedKeys)
-        #end
-
-        {
-          "id": "$ctx.stash.node",
-          "label": "$ctx.args.question"
-        }
-      `),
+      requestMappingTemplate: MappingTemplate.fromString(
+        mutationSurveyMultipleChoiceCreateTpl.request(surveyTable.tableName)
+      ),
+      responseMappingTemplate: MappingTemplate.fromString(
+        mutationSurveyMultipleChoiceCreateTpl.response
+      ),
     });
 
     dataSource.createResolver({
       typeName: "SurveyMultipleChoice",
       fieldName: "answers",
-      requestMappingTemplate: MappingTemplate.fromString(`
-        {
-          "version" : "2017-02-28",
-          "operation" : "Query",
-          "query" : {
-            "expression": "#node = :node AND begins_with(#path, :path)",
-            "expressionNames" : {
-              "#node": "node",
-              "#path": "path"
-            },
-            "expressionValues" : {
-              ":node" : $util.dynamodb.toDynamoDBJson($ctx.source.id),
-              ":path" : $util.dynamodb.toDynamoDBJson("answer#")
-            }
-          }
-        }
-      `),
-      responseMappingTemplate: MappingTemplate.dynamoDbResultList(),
+      requestMappingTemplate: MappingTemplate.fromString(
+        surveyMultipleChoiceAnswersTpl.request
+      ),
+      responseMappingTemplate: MappingTemplate.fromString(
+        surveyMultipleChoiceAnswersTpl.response
+      ),
     });
 
     dataSource.createResolver({
       typeName: "Mutation",
       fieldName: "surveyTextareaCreate",
-      requestMappingTemplate: MappingTemplate.fromString(`
-        #set($node = $util.autoId())
-
-        {
-          "version" : "2017-02-28",
-          "operation" : "PutItem",
-          "key" : {
-            "node" : $util.dynamodb.toDynamoDBJson($node),
-            "path" : $util.dynamodb.toDynamoDBJson("survey")
-          },
-          "attributeValues" : {
-            "id": $util.dynamodb.toDynamoDBJson($node), 
-            "label": $util.dynamodb.toDynamoDBJson($ctx.args.question), 
-            "surveyType": $util.dynamodb.toDynamoDBJson("TEXTAREA")
-          }
-        }
-      `),
-      responseMappingTemplate: MappingTemplate.fromString(`
-        $utils.toJson($context.result)
-      `),
+      requestMappingTemplate: MappingTemplate.fromString(
+        mutationSurveyTextareaCreateTpl.request
+      ),
+      responseMappingTemplate: MappingTemplate.fromString(
+        mutationSurveyTextareaCreateTpl.response
+      ),
     });
 
     const resolverSurveyMultipleChoiceSubmit = new CfnResolver(
@@ -282,14 +172,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
             functionSurveyByID.getAtt("FunctionId").toString(),
           ],
         },
-        requestMappingTemplate: `
-          $util.qr($ctx.stash.put("surveyID", $ctx.args.surveyID))
-          $util.qr($ctx.stash.put("answerID", $ctx.args.answerID))
-          {}
-        `,
-        responseMappingTemplate: `
-          $util.toJson($ctx.result)
-        `,
+        requestMappingTemplate: mutationSurveyMultipleChoiceSubmitTpl.request,
+        responseMappingTemplate: mutationSurveyMultipleChoiceSubmitTpl.response,
       }
     );
 
@@ -312,14 +196,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
             functionSurveyByID.getAtt("FunctionId").toString(),
           ],
         },
-        requestMappingTemplate: `
-          $util.qr($ctx.stash.put("surveyID", $ctx.args.surveyID))
-          $util.qr($ctx.stash.put("text", $ctx.args.text))
-          {}
-        `,
-        responseMappingTemplate: `
-          $util.toJson($ctx.result)
-        `,
+        requestMappingTemplate: mutationSurveyTextareaSubmitTpl.request,
+        responseMappingTemplate: mutationSurveyTextareaSubmitTpl.response,
       }
     );
 
@@ -329,24 +207,12 @@ export class ServerlessSurveyStack extends cdk.Stack {
     dataSource.createResolver({
       typeName: "SurveyTextarea",
       fieldName: "submissions",
-      requestMappingTemplate: MappingTemplate.fromString(`
-        {
-          "version" : "2017-02-28",
-          "operation" : "Query",
-          "query" : {
-            "expression": "#node = :node AND begins_with(#path, :path)",
-            "expressionNames" : {
-              "#node": "node",
-              "#path": "path"
-            },
-            "expressionValues" : {
-              ":node" : $util.dynamodb.toDynamoDBJson($ctx.source.id),
-              ":path" : $util.dynamodb.toDynamoDBJson("submission#")
-            }
-          }
-        }
-      `),
-      responseMappingTemplate: MappingTemplate.dynamoDbResultList(),
+      requestMappingTemplate: MappingTemplate.fromString(
+        surveyTextareaSubmissionTpl.request
+      ),
+      responseMappingTemplate: MappingTemplate.fromString(
+        surveyTextareaSubmissionTpl.response
+      ),
     });
   }
 }
