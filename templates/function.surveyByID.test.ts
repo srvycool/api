@@ -25,7 +25,7 @@ describe("function:surveyByID", () => {
             label: "Coffee?",
             surveyType: "MULTIPLE_CHOICE",
           },
-        } as Context;
+        };
 
         expect(parser.resolve(context)).toMatchSnapshot();
       });
@@ -40,7 +40,7 @@ describe("function:surveyByID", () => {
             label: "How are you?",
             surveyType: "TEXTAREA",
           },
-        } as Context;
+        };
 
         expect(parser.resolve(context)).toMatchSnapshot();
       });
