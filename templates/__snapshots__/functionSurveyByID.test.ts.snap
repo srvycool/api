@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`function:surveyByID request should match snapshot 1`] = `
+exports[`templates:functionSurveyByID request should match snapshot 1`] = `
 Object {
   "key": Object {
     "node": Object {
-      "S": "aa-bb-ccdjfbnj",
+      "S": "aa-bb-cc",
     },
     "path": Object {
       "S": "survey",
@@ -15,7 +15,7 @@ Object {
 }
 `;
 
-exports[`function:surveyByID response surveyType is multiple choice should match snapshot 1`] = `
+exports[`templates:functionSurveyByID response surveyType is multiple choice should match snapshot 1`] = `
 Object {
   "__typename": "SurveyMultipleChoice",
   "id": "aa-bb-cc",
@@ -23,7 +23,7 @@ Object {
 }
 `;
 
-exports[`function:surveyByID response surveyType is textarea should match snapshot 1`] = `
+exports[`templates:functionSurveyByID response surveyType is textarea should match snapshot 1`] = `
 Object {
   "__typename": "SurveyTextarea",
   "id": "aa-bb-cc",

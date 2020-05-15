@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`templates:functionSurveyTextareaSubmit request should match snapshot 1`] = `
+Object {
+  "attributeValues": Object {
+    "id": Object {
+      "S": "gg-hh-ii",
+    },
+    "text": Object {
+      "S": "Awesome!",
+    },
+  },
+  "key": Object {
+    "node": Object {
+      "S": "aa-bb-cc",
+    },
+    "path": Object {
+      "S": "submission#gg-hh-ii",
+    },
+  },
+  "operation": "PutItem",
+  "version": "2017-02-28",
+}
+`;
+
+exports[`templates:functionSurveyTextareaSubmit response should match snapshot 1`] = `Object {}`;

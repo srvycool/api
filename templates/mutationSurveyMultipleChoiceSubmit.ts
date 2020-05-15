@@ -1,6 +1,6 @@
 export const request = `
-  $util.qr($ctx.stash.put("surveyID", $ctx.args.surveyID))
-  $util.qr($ctx.stash.put("answerID", $ctx.args.answerID))
+  $util.qr($ctx.stash.put("surveyID", $ctx.arguments.surveyID))
+  $util.qr($ctx.stash.put("answerID", $ctx.arguments.answerID))
   {}
 `;
 

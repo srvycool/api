@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`templates:mutationSurveyTextareaCreate request should match snapshot 1`] = `
+Object {
+  "attributeValues": Object {
+    "id": Object {
+      "S": "gg-hh-ii",
+    },
+    "label": Object {
+      "S": "How are you?",
+    },
+    "surveyType": Object {
+      "S": "TEXTAREA",
+    },
+  },
+  "key": Object {
+    "node": Object {
+      "S": "gg-hh-ii",
+    },
+    "path": Object {
+      "S": "survey",
+    },
+  },
+  "operation": "PutItem",
+  "version": "2017-02-28",
+}
+`;
+
+exports[`templates:mutationSurveyTextareaCreate response should match snapshot 1`] = `
+Object {
+  "id": "hh-ii-kk",
+}
+`;
