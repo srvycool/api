@@ -84,7 +84,7 @@ jobs:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}-${{ env.CACHE_VERSION }}
       - name: Deploy
-        run: yarn build && yarn cdk deploy
+        run: yarn build && yarn cdk deploy --require-approval never
 
   deploy-prod:
     runs-on: ubuntu-latest
@@ -110,4 +110,4 @@ jobs:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}-${{ env.CACHE_VERSION }}
       - name: Deploy
-        run: yarn build && yarn cdk deploy
+        run: yarn build && yarn cdk deploy --require-approval never
