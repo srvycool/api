@@ -6,6 +6,8 @@
     "lib/**/*.js": true,
     "test/**/*.d.ts": true,
     "test/**/*.js": true,
+    "e2e/**/*.js": true,
+    "e2e/**/*.d.ts": true,
     "templates/**/*.d.ts": true,
     "templates/**/*.js": true
   }
