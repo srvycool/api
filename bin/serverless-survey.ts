@@ -10,7 +10,7 @@ if (!environment) {
 }
 
 const app = new cdk.App();
-new ServerlessSurveyStack(app, `ServerlessSurveyStack (${environment})`, {
+new ServerlessSurveyStack(app, `ServerlessSurveyStack${environment}`, {
   env: {
     region: "eu-west-1",
   },
