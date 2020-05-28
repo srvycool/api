@@ -5,6 +5,7 @@ import {
   MappingTemplate,
   CfnFunctionConfiguration,
   CfnResolver,
+  CfnGraphQLApi,
 } from "@aws-cdk/aws-appsync";
 import {
   Table,
@@ -38,13 +39,11 @@ export class ServerlessSurveyStack extends cdk.Stack {
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
       },
-      authorizationConfig: {
-        defaultAuthorization: {
-          apiKeyDesc: "API KEY",
-        },
-      },
       schemaDefinitionFile: "./schema.graphql",
     });
+
+    // Hack: https://github.com/aws/aws-cdk/issues/7177
+    (api.node.defaultChild as CfnGraphQLApi).authenticationType = "AWS_IAM";
 
     const dataSource = api.addDynamoDbDataSource(
       "SurveyTableDataSoure",

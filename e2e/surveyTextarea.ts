@@ -1,4 +1,4 @@
-import { GraphQLClient } from "graphql-request";
+import { AppSyncSign4Client } from "./utils/AppSyncSign4Client";
 import { deepEqual } from "assert";
 
 interface SurveyTextareaCreate {
@@ -18,7 +18,7 @@ interface SurveyTextarea {
 const question = "How are you?";
 const submission = "Awesome!";
 
-async function create(client: GraphQLClient) {
+async function create(client: AppSyncSign4Client) {
   return client.request<SurveyTextareaCreate>(
     `
     mutation SurveyTextareaCreate($question: String!) {
@@ -31,7 +31,11 @@ async function create(client: GraphQLClient) {
   );
 }
 
-async function submit(client: GraphQLClient, surveyID: string, text: string) {
+async function submit(
+  client: AppSyncSign4Client,
+  surveyID: string,
+  text: string
+) {
   return client.request<{ surveyTextareaSubmit: SurveyTextarea }>(
     `
     mutation SurveyTextareaSubmit($surveyID: ID!, $text: String!) {
@@ -49,7 +53,7 @@ async function submit(client: GraphQLClient, surveyID: string, text: string) {
   );
 }
 
-async function query(client: GraphQLClient, surveyID: string) {
+async function query(client: AppSyncSign4Client, surveyID: string) {
   return client.request<{ survey: SurveyTextarea }>(
     `
     query Survey($surveyID: ID!) {
@@ -71,7 +75,7 @@ async function query(client: GraphQLClient, surveyID: string) {
   );
 }
 
-export async function surveyTextareaTest(client: GraphQLClient) {
+export async function surveyTextareaTest(client: AppSyncSign4Client) {
   const { surveyTextareaCreate } = await create(client);
   const { survey } = await query(client, surveyTextareaCreate.id);
 
