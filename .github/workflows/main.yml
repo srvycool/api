@@ -79,9 +79,9 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}-${{ env.CACHE_VERSION }}
-      - name: Diff
+      - name: Diff staging
         run: ENVIRONMENT=staging yarn cdk diff
-      - name: Diff
+      - name: Diff prod
         run: ENVIRONMENT=prod yarn cdk diff
 
   e2e:
@@ -101,4 +101,4 @@ jobs:
       - name: Deploy instance
         run: yarn cdk deploy --require-approval never -O outputs.json
       - name: Run e2e tests
-        run: ENDPOINT=${cat outputs.json | jq -r .ServerlessSurveyStack${{ github.ref }}.GraphQLEndpoint} yarn ts-node e2e
+        run: ENDPOINT=$(cat outputs.json | jq -r '.. | .GraphQLEndpoint? | select(type != "null")') yarn ts-node e2e
