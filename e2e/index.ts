@@ -1,30 +1,28 @@
+import { notDeepStrictEqual } from "assert";
 import { surveyMultipleChoiceTest } from "./surveyMultipleChoice";
 import { surveyTextareaTest } from "./surveyTextarea";
 import { AppSyncSign4Client } from "./utils/AppSyncSign4Client";
+import { Credentials } from "../token.json";
 
 async function main() {
   const endpoint = process.env.ENDPOINT;
   const region = process.env.AWS_REGION;
-  const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-  const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-  const sessionToken = process.env.AWS_SESSION_TOKEN;
+  const accessKeyId = Credentials.AccessKeyId;
+  const secretAccessKey = Credentials.SecretAccessKey;
+  const sessionToken = Credentials.SessionToken;
 
-  if (
-    !endpoint ||
-    !accessKeyId ||
-    !secretAccessKey ||
-    !region ||
-    !sessionToken
-  ) {
-    throw new Error("Environment variables missing!");
-  }
+  notDeepStrictEqual(endpoint, undefined, "process.env.ENDPOINT missing!");
+  notDeepStrictEqual(region, undefined, "process.env.AWS_REGION missing!");
+  notDeepStrictEqual(accessKeyId, undefined, "accessKeyId missing!");
+  notDeepStrictEqual(secretAccessKey, undefined, "secretAccessKey missing!");
+  notDeepStrictEqual(sessionToken, undefined, "sessionToken missing!");
 
   const client = new AppSyncSign4Client({
-    endpoint,
-    region,
-    accessKeyId,
-    secretAccessKey,
-    sessionToken,
+    endpoint: endpoint!,
+    region: region!,
+    accessKeyId: accessKeyId!,
+    secretAccessKey: secretAccessKey!,
+    sessionToken: sessionToken!,
   });
 
   await Promise.all([

@@ -211,5 +211,9 @@ export class ServerlessSurveyStack extends cdk.Stack {
         templates.surveyTextareaSubmission.response
       ),
     });
+
+    new cdk.CfnOutput(this, "GraphQLEndpoint", {
+      value: api.graphQlUrl,
+    });
   }
 }
