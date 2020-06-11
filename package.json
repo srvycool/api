@@ -10,12 +10,12 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "1.38.0",
+    "@aws-cdk/assert": "^1.45.0",
     "@types/crypto-js": "^3.1.47",
     "@types/jest": "^25.2.1",
     "@types/node": "10.17.5",
     "appsync-template-tester": "^1.0.9",
-    "aws-cdk": "1.38.0",
+    "aws-cdk": "^1.45.0",
     "cross-fetch": "^3.0.4",
     "crypto-js": "^4.0.0",
     "jest": "^25.5.0",
@@ -25,9 +25,9 @@
     "url": "^0.11.0"
   },
   "dependencies": {
-    "@aws-cdk/aws-appsync": "^1.38.0",
-    "@aws-cdk/aws-dynamodb": "^1.38.0",
-    "@aws-cdk/core": "1.38.0",
+    "@aws-cdk/aws-appsync": "^1.45.0",
+    "@aws-cdk/aws-dynamodb": "^1.45.0",
+    "@aws-cdk/core": "^1.45.0",
     "source-map-support": "^0.5.16"
   }
 }
