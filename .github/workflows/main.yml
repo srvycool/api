@@ -10,7 +10,6 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: eu-west-1
   AWS_DEFAULT_REGION: eu-west-1
-  ENVIRONMENT: ${{ github.ref }}
 
 jobs:
   dependencies:
@@ -34,6 +33,8 @@ jobs:
   synth:
     runs-on: ubuntu-latest
     needs: dependencies
+    env:
+      ENVIRONMENT: example
     steps:
       - uses: actions/checkout@v1
       - name: Setup Node.js
@@ -98,6 +99,8 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}-${{ env.CACHE_VERSION }}
+      - name: Set ENVIRONMENT
+        run: echo "::set-env name=ENVIRONMENT::PullRequest$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
       - name: Deploy instance
         run: yarn cdk deploy --require-approval never -O outputs.json
       - name: Run e2e tests
