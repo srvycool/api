@@ -1,4 +1,4 @@
-name: Clean up pull request stack
+name: Clean Up Pull Request Stack
 
 on:
   pull_request:
