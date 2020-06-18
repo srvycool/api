@@ -20,10 +20,6 @@ export const request = (tableName: string) => `
 `;
 
 export const response = `
-  #if ($ctx.error)
-    $util.error($ctx.error.message, $ctx.error.type, null, $ctx.result.data.unprocessedKeys)
-  #end
-
   {
     "id": "$ctx.stash.node",
     "label": "$ctx.arguments.question"

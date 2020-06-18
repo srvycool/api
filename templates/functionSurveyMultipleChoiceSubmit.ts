@@ -19,8 +19,5 @@ export const request = `
 `;
 
 export const response = `
-  #if ($ctx.error)
-    $util.error($ctx.error.message, $ctx.error.type, null, $ctx.result.data.unprocessedKeys)
-  #end
   {}
 `;

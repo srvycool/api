@@ -10,10 +10,6 @@ export const request = `
 `;
 
 export const response = `
-  #if ($ctx.error)
-    $util.error($ctx.error.message, $ctx.error.type, null, $ctx.result.data.unprocessedKeys)
-  #end
-
   #set($typeMapping = {})
   $util.qr($typeMapping.put('MULTIPLE_CHOICE', 'SurveyMultipleChoice'))
   $util.qr($typeMapping.put('TEXTAREA', 'SurveyTextarea'))
