@@ -26,5 +26,5 @@ jobs:
         run: yarn
       - name: Set ENVIRONMENT
         run: echo "::set-env name=ENVIRONMENT::PullRequest$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
-      - name: Deploy instance
-        run: yarn cdk destroy
+      - name: Destroy pull request test stack
+        run: yarn cdk destroy --force
