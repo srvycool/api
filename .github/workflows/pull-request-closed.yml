@@ -1,4 +1,4 @@
-name: PullRequestClosed
+name: Clean up pull request stack
 
 on:
   pull_request:
