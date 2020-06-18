@@ -90,7 +90,7 @@ jobs:
 
   smoke-tests:
     runs-on: ubuntu-latest
-    needs: [dependencies, test, synth]
+    needs: [dependencies, test, synth, deploy-staging]
     env:
       ENVIRONMENT: staging
     steps:
