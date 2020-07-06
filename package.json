@@ -12,7 +12,7 @@
   "devDependencies": {
     "@aws-cdk/assert": "^1.45.0",
     "@types/crypto-js": "^3.1.47",
-    "@types/jest": "^25.2.1",
+    "@types/jest": "^26.0.3",
     "@types/node": "14.0.14",
     "appsync-template-tester": "^1.0.9",
     "aws-cdk": "^1.49.1",
