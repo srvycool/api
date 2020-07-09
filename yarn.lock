@@ -313,7 +313,7 @@
     string-width "^4.2.0"
     table "^5.4.6"
 
-"@aws-cdk/core@1.45.0", "@aws-cdk/core@^1.45.0":
+"@aws-cdk/core@1.45.0":
   version "1.45.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/core/-/core-1.45.0.tgz#910d2820d7530f3e30f7eb0178dfce8be0673d4c"
   integrity sha512-XsUlW5OJi/gRfPbRQp/ps8uqUX6a8KIKXFHbl8sYVoiUWRYOwZq58ffO5EhGL841vZb21xRbgysSfURbWLSlUA==
@@ -322,6 +322,17 @@
     "@aws-cdk/cloud-assembly-schema" "1.45.0"
     "@aws-cdk/cx-api" "1.45.0"
     constructs "^3.0.2"
+    minimatch "^3.0.4"
+
+"@aws-cdk/core@^1.50.0":
+  version "1.50.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/core/-/core-1.50.0.tgz#a3a3cff1c26de9c2c34e1faa38e6da4b76ea985f"
+  integrity sha512-zge85xzVlX3Y0Vn2vKC8LAYxJe7CYLNGcHijxfjFgqbYTrnnuLRLzDm6Ke/5JUBprLT8K95ZRHXYhFFx8lCI7Q==
+  dependencies:
+    "@aws-cdk/cloud-assembly-schema" "1.50.0"
+    "@aws-cdk/cx-api" "1.50.0"
+    constructs "^3.0.2"
+    fs-extra "^9.0.1"
     minimatch "^3.0.4"
 
 "@aws-cdk/custom-resources@1.45.0":
