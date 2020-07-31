@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.51.0",
+    "@aws-cdk/assert": "^1.55.0",
     "@types/crypto-js": "^3.1.47",
     "@types/jest": "^26.0.8",
     "@types/node": "14.0.27",
