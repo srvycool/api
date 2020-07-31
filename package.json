@@ -18,7 +18,7 @@
     "aws-cdk": "^1.55.0",
     "cross-fetch": "^3.0.5",
     "crypto-js": "^4.0.0",
-    "jest": "^26.1.0",
+    "jest": "^26.2.1",
     "ts-jest": "^26.1.4",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7",
