@@ -349,13 +349,24 @@
     fs-extra "^9.0.1"
     minimatch "^3.0.4"
 
-"@aws-cdk/core@1.52.0", "@aws-cdk/core@^1.45.0":
+"@aws-cdk/core@1.52.0":
   version "1.52.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/core/-/core-1.52.0.tgz#494c8af3f3d007be81abcfed7c2ebd4f93787acd"
   integrity sha512-C5qy/6yqXJUrt/UvaGWAhLI8eB+Yfg9OQenxAKbyejZ3OG8l6vvaX8PWSmqSuegst9v0ErKCEWxR7JTBiGBHfA==
   dependencies:
     "@aws-cdk/cloud-assembly-schema" "1.52.0"
     "@aws-cdk/cx-api" "1.52.0"
+    constructs "^3.0.2"
+    fs-extra "^9.0.1"
+    minimatch "^3.0.4"
+
+"@aws-cdk/core@^1.60.0":
+  version "1.60.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/core/-/core-1.60.0.tgz#d4c8a109bb52d9bd9ed3500a27cd2cc7a9217656"
+  integrity sha512-h6P5z6E/8ttINA9IqrFxXamHZraPj1NlCE83I5QHaWPACaVe+EJbvjU3dITDyK/+fGjmQ/1m4rFaNMyBd43mVg==
+  dependencies:
+    "@aws-cdk/cloud-assembly-schema" "1.60.0"
+    "@aws-cdk/cx-api" "1.60.0"
     constructs "^3.0.2"
     fs-extra "^9.0.1"
     minimatch "^3.0.4"
