@@ -5,7 +5,7 @@ import {
   MappingTemplate,
   CfnFunctionConfiguration,
   CfnResolver,
-  CfnGraphQLApi,
+  AuthorizationType
 } from "@aws-cdk/aws-appsync";
 import {
   Table,
@@ -14,6 +14,7 @@ import {
   StreamViewType,
 } from "@aws-cdk/aws-dynamodb";
 import * as templates from "../templates";
+import moment from 'moment';
 
 export class ServerlessSurveyStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -40,10 +41,20 @@ export class ServerlessSurveyStack extends cdk.Stack {
         fieldLogLevel: FieldLogLevel.ALL,
       },
       schemaDefinitionFile: "./schema.graphql",
+      authorizationConfig: {
+        defaultAuthorization: {
+          authorizationType: AuthorizationType.IAM
+        },
+        additionalAuthorizationModes: [
+          {
+            authorizationType: AuthorizationType.API_KEY,
+            apiKeyConfig: {
+              expires: moment.utc().add(365, 'days').toISOString()
+            }
+          }
+        ]
+      }
     });
-
-    // Hack: https://github.com/aws/aws-cdk/issues/7177
-    (api.node.defaultChild as CfnGraphQLApi).authenticationType = "AWS_IAM";
 
     const dataSource = api.addDynamoDbDataSource(
       "SurveyTableDataSoure",
