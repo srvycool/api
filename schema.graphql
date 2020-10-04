@@ -1,20 +1,20 @@
 # General
 type Query {
-  survey(id: ID!): Survey!
+  survey(id: ID!): Survey! @aws_api_key
 }
 
 type Mutation {
   surveyMultipleChoiceCreate(
     question: String!
     answers: [String!]!
-  ): SurveyMultipleChoice!
+  ): SurveyMultipleChoice! @aws_api_key
   surveyMultipleChoiceSubmit(
     surveyID: ID!
     answerID: ID!
-  ): SurveyMultipleChoice!
+  ): SurveyMultipleChoice! @aws_api_key
 
-  surveyTextareaCreate(question: String!): SurveyTextarea!
-  surveyTextareaSubmit(surveyID: ID!, text: String!): SurveyTextarea!
+  surveyTextareaCreate(question: String!): SurveyTextarea! @aws_api_key
+  surveyTextareaSubmit(surveyID: ID!, text: String!): SurveyTextarea! @aws_api_key
 }
 
 schema {
