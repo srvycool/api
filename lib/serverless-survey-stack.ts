@@ -49,7 +49,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
           {
             authorizationType: AuthorizationType.API_KEY,
             apiKeyConfig: {
-              expires: moment.utc().add(365, 'days').toISOString()
+              expires: moment.utc().add(364, 'days').format()
             }
           }
         ]
