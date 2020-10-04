@@ -1,20 +1,20 @@
 # General
 type Query {
-  survey(id: ID!): Survey! @aws_api_key
+  survey(id: ID!): Survey!
 }
 
 type Mutation {
   surveyMultipleChoiceCreate(
     question: String!
     answers: [String!]!
-  ): SurveyMultipleChoice! @aws_api_key
+  ): SurveyMultipleChoice!
   surveyMultipleChoiceSubmit(
     surveyID: ID!
     answerID: ID!
-  ): SurveyMultipleChoice! @aws_api_key
+  ): SurveyMultipleChoice!
 
-  surveyTextareaCreate(question: String!): SurveyTextarea! @aws_api_key
-  surveyTextareaSubmit(surveyID: ID!, text: String!): SurveyTextarea! @aws_api_key
+  surveyTextareaCreate(question: String!): SurveyTextarea!
+  surveyTextareaSubmit(surveyID: ID!, text: String!): SurveyTextarea!
 }
 
 schema {
@@ -29,26 +29,26 @@ interface Survey {
 }
 
 # Survey Multiple Choice
-type SurveyMultipleChoice implements Survey @aws_api_key {
+type SurveyMultipleChoice implements Survey {
   id: ID!
   label: String!
   answers: [SurveyMultipleChoiceAnswer!]!
 }
 
-type SurveyMultipleChoiceAnswer @aws_api_key {
+type SurveyMultipleChoiceAnswer {
   id: ID!
   label: String!
   votes: Int!
 }
 
 # Survey Textarea
-type SurveyTextarea implements Survey @aws_api_key {
+type SurveyTextarea implements Survey {
   id: ID!
   label: String!
   submissions: [SurveyTextareSubmission!]!
 }
 
-type SurveyTextareSubmission @aws_api_key {
+type SurveyTextareSubmission {
   id: ID!
   text: String!
 }

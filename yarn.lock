@@ -22,6 +22,24 @@
     "@aws-cdk/cx-api" "1.66.0"
     constructs "^3.0.4"
 
+"@aws-cdk/aws-apigateway@^1.66.0":
+  version "1.66.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-apigateway/-/aws-apigateway-1.66.0.tgz#5411ec8e400b5981cc113bdea1baf3b77e5cdecd"
+  integrity sha512-15RjBCj4G3XszjREE8DEtJfrTmTWlPvOvaeKB8N5cHbXZAklVS3DPLX8pjMd53W2rnuVVKsDexcxf61IxVpIIA==
+  dependencies:
+    "@aws-cdk/assets" "1.66.0"
+    "@aws-cdk/aws-certificatemanager" "1.66.0"
+    "@aws-cdk/aws-ec2" "1.66.0"
+    "@aws-cdk/aws-elasticloadbalancingv2" "1.66.0"
+    "@aws-cdk/aws-iam" "1.66.0"
+    "@aws-cdk/aws-lambda" "1.66.0"
+    "@aws-cdk/aws-logs" "1.66.0"
+    "@aws-cdk/aws-s3" "1.66.0"
+    "@aws-cdk/aws-s3-assets" "1.66.0"
+    "@aws-cdk/core" "1.66.0"
+    "@aws-cdk/cx-api" "1.66.0"
+    constructs "^3.0.4"
+
 "@aws-cdk/aws-applicationautoscaling@1.66.0":
   version "1.66.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-applicationautoscaling/-/aws-applicationautoscaling-1.66.0.tgz#baeb4097005f532c73073c328f50e8b95b8b33d0"
@@ -153,6 +171,21 @@
     "@aws-cdk/cx-api" "1.66.0"
     constructs "^3.0.4"
 
+"@aws-cdk/aws-elasticloadbalancingv2@1.66.0":
+  version "1.66.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-elasticloadbalancingv2/-/aws-elasticloadbalancingv2-1.66.0.tgz#dcf1c4a935c5c54f8725bb3f602af3276d51280d"
+  integrity sha512-Ognxbp4CvnuZdq2fSAnBtWFKXTedlvLluZbiFUzzhKNOQUwJXg1sKVgP7Ssa+oAIywbB7D4ZNHcJ2FZgQxRZSA==
+  dependencies:
+    "@aws-cdk/aws-certificatemanager" "1.66.0"
+    "@aws-cdk/aws-cloudwatch" "1.66.0"
+    "@aws-cdk/aws-ec2" "1.66.0"
+    "@aws-cdk/aws-iam" "1.66.0"
+    "@aws-cdk/aws-lambda" "1.66.0"
+    "@aws-cdk/aws-s3" "1.66.0"
+    "@aws-cdk/core" "1.66.0"
+    "@aws-cdk/region-info" "1.66.0"
+    constructs "^3.0.4"
+
 "@aws-cdk/aws-events@1.66.0":
   version "1.66.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-events/-/aws-events-1.66.0.tgz#b0ec3f7a39e3414141a76a00031a9538a1970406"
@@ -162,7 +195,7 @@
     "@aws-cdk/core" "1.66.0"
     constructs "^3.0.4"
 
-"@aws-cdk/aws-iam@1.66.0":
+"@aws-cdk/aws-iam@1.66.0", "@aws-cdk/aws-iam@^1.66.0":
   version "1.66.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-iam/-/aws-iam-1.66.0.tgz#632a949d4ae2500522b8f99dfa4ac12bdd63dbba"
   integrity sha512-rWUQVDgCQ31btE9LnsFnNHkUmZmRBF5COOimX2bItXxNQF2lTSKxThP71E0IGCF0Rl3FkjXLo0yoXnIQGJr08Q==
