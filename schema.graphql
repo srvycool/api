@@ -29,26 +29,26 @@ interface Survey {
 }
 
 # Survey Multiple Choice
-type SurveyMultipleChoice implements Survey {
+type SurveyMultipleChoice implements Survey @aws_api_key {
   id: ID!
   label: String!
   answers: [SurveyMultipleChoiceAnswer!]!
 }
 
-type SurveyMultipleChoiceAnswer {
+type SurveyMultipleChoiceAnswer @aws_api_key {
   id: ID!
   label: String!
   votes: Int!
 }
 
 # Survey Textarea
-type SurveyTextarea implements Survey {
+type SurveyTextarea implements Survey @aws_api_key {
   id: ID!
   label: String!
   submissions: [SurveyTextareSubmission!]!
 }
 
-type SurveyTextareSubmission {
+type SurveyTextareSubmission @aws_api_key {
   id: ID!
   text: String!
 }
