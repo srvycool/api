@@ -262,7 +262,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, "GraphQLEndpoint", {
-      value: `https://${proxy.restApiId}.execute-api.${this.region}.amazonaws.com/prod`,
+      value: `https://${proxy.restApiId}.execute-api.${this.region}.amazonaws.com/prod/graphql`,
     });
   }
 }

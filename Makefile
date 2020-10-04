@@ -8,7 +8,6 @@ deploy:
 	yarn cdk deploy
 
 run-e2e:
-	@aws sts get-session-token > token.json
 	ENDPOINT=$(shell make get-graphql-endpoint) yarn ts-node e2e
 
 get-graphql-endpoint:

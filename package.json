@@ -11,13 +11,11 @@
   },
   "devDependencies": {
     "@aws-cdk/assert": "^1.66.0",
-    "@types/crypto-js": "^4.0.0",
     "@types/jest": "^26.0.14",
     "@types/node": "14.11.2",
     "appsync-template-tester": "^1.0.9",
     "aws-cdk": "^1.66.0",
     "cross-fetch": "^3.0.6",
-    "crypto-js": "^4.0.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.4.1",
     "ts-node": "^9.0.0",
