@@ -14,7 +14,9 @@ import {
   StreamViewType,
 } from "@aws-cdk/aws-dynamodb";
 import * as templates from "../templates";
-import { Expiration } from "@aws-cdk/core";
+import { AwsIntegration, Cors, Model, RestApi } from "@aws-cdk/aws-apigateway";
+import { Policy, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
+import { Fn } from "@aws-cdk/core";
 
 const environment = process.env.ENVIRONMENT;
 
@@ -47,15 +49,50 @@ export class ServerlessSurveyStack extends cdk.Stack {
         defaultAuthorization: {
           authorizationType: AuthorizationType.IAM
         },
-        additionalAuthorizationModes: [
-          {
-            authorizationType: AuthorizationType.API_KEY,
-            apiKeyConfig: {
-              expires: Expiration.after(cdk.Duration.days(365))
-            }
-          }
-        ]
       }
+    });
+
+    const proxyServiceIntegrationPolicy = new Policy(this, `ServerlessSurvey Proxy Policy ${environment}`, {
+      statements: [
+        new PolicyStatement({
+          actions: ['appsync:GraphQL'],
+          resources: [`${api.arn}/*`],
+        }),
+      ],
+    });
+
+    const proxyServiceIntegrationRole = new Role(this, `ServerlessSurvey Proxy Role ${environment}`, {
+      assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
+    });
+    proxyServiceIntegrationRole.attachInlinePolicy(proxyServiceIntegrationPolicy)
+
+    const proxy = new RestApi(this, `ServerlessSurvey ${environment}`, {
+      defaultCorsPreflightOptions: {
+        allowOrigins: Cors.ALL_ORIGINS,
+      },
+    });
+    const proxyGraphqlEndpoint = proxy.root.addResource('graphql');
+    proxyGraphqlEndpoint.addMethod('ANY', new AwsIntegration({
+      service: 'appsync-api',
+      subdomain: Fn.select(0, Fn.split('.', Fn.select(1, Fn.split('https://', api.graphqlUrl)))),
+      path: 'graphql',
+      options: {
+        credentialsRole: proxyServiceIntegrationRole,
+        integrationResponses: [{
+          statusCode: '200',
+          responseTemplates: {
+            'application/json': ''
+          }
+        }]
+      }
+    }), {
+      methodResponses: [
+        {
+          statusCode: '200', responseModels: {
+            'application/json': Model.EMPTY_MODEL
+          }
+        }
+      ]
     });
 
     const dataSource = api.addDynamoDbDataSource(
@@ -225,7 +262,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, "GraphQLEndpoint", {
-      value: api.graphqlUrl,
+      value: `https://${proxy.restApiId}.execute-api.${this.region}.amazonaws.com/prod/graphql`,
     });
   }
 }

@@ -1,4 +1,4 @@
-import { AppSyncSign4Client } from "./utils/AppSyncSign4Client";
+import { AppSyncClient } from "./utils/AppSyncClient";
 import { deepEqual } from "assert";
 
 interface SurveyMultipleChoiceCreate {
@@ -18,7 +18,7 @@ interface SurveyMultipleChoice {
 
 const question = "Coffee?";
 
-async function create(client: AppSyncSign4Client) {
+async function create(client: AppSyncClient) {
   return client.request<SurveyMultipleChoiceCreate>(
     `
     mutation SurveyMultipleChoiceCreate($question: String!) {
@@ -32,7 +32,7 @@ async function create(client: AppSyncSign4Client) {
 }
 
 async function submit(
-  client: AppSyncSign4Client,
+  client: AppSyncClient,
   surveyID: string,
   answerID: string
 ) {
@@ -54,7 +54,7 @@ async function submit(
   );
 }
 
-async function query(client: AppSyncSign4Client, surveyID: string) {
+async function query(client: AppSyncClient, surveyID: string) {
   return client.request<{ survey: SurveyMultipleChoice }>(
     `
     query Survey($surveyID: ID!) {
@@ -77,7 +77,7 @@ async function query(client: AppSyncSign4Client, surveyID: string) {
   );
 }
 
-export async function surveyMultipleChoiceTest(client: AppSyncSign4Client) {
+export async function surveyMultipleChoiceTest(client: AppSyncClient) {
   const { surveyMultipleChoiceCreate } = await create(client);
 
   const { survey } = await query(client, surveyMultipleChoiceCreate.id);

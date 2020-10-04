@@ -1,4 +1,4 @@
-import { AppSyncSign4Client } from "./utils/AppSyncSign4Client";
+import { AppSyncClient } from "./utils/AppSyncClient";
 import { deepEqual } from "assert";
 
 interface SurveyTextareaCreate {
@@ -18,7 +18,7 @@ interface SurveyTextarea {
 const question = "How are you?";
 const submission = "Awesome!";
 
-async function create(client: AppSyncSign4Client) {
+async function create(client: AppSyncClient) {
   return client.request<SurveyTextareaCreate>(
     `
     mutation SurveyTextareaCreate($question: String!) {
@@ -32,7 +32,7 @@ async function create(client: AppSyncSign4Client) {
 }
 
 async function submit(
-  client: AppSyncSign4Client,
+  client: AppSyncClient,
   surveyID: string,
   text: string
 ) {
@@ -53,7 +53,7 @@ async function submit(
   );
 }
 
-async function query(client: AppSyncSign4Client, surveyID: string) {
+async function query(client: AppSyncClient, surveyID: string) {
   return client.request<{ survey: SurveyTextarea }>(
     `
     query Survey($surveyID: ID!) {
@@ -75,7 +75,7 @@ async function query(client: AppSyncSign4Client, surveyID: string) {
   );
 }
 
-export async function surveyTextareaTest(client: AppSyncSign4Client) {
+export async function surveyTextareaTest(client: AppSyncClient) {
   const { surveyTextareaCreate } = await create(client);
   const { survey } = await query(client, surveyTextareaCreate.id);
 
