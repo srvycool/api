@@ -16,6 +16,8 @@ import {
 import * as templates from "../templates";
 import { Expiration } from "@aws-cdk/core";
 
+const environment = process.env.ENVIRONMENT;
+
 export class ServerlessSurveyStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -36,7 +38,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
     });
 
     const api = new GraphqlApi(this, "ServerlessSurvey", {
-      name: `ServerlessSurvey`,
+      name: `ServerlessSurvey ${environment}`,
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
       },
