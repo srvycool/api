@@ -1,11 +1,11 @@
 import * as cdk from "@aws-cdk/core";
 import {
-  GraphQLApi,
+  GraphqlApi,
   FieldLogLevel,
   MappingTemplate,
   CfnFunctionConfiguration,
   CfnResolver,
-  CfnGraphQLApi,
+  AuthorizationType, Schema
 } from "@aws-cdk/aws-appsync";
 import {
   Table,
@@ -14,6 +14,9 @@ import {
   StreamViewType,
 } from "@aws-cdk/aws-dynamodb";
 import * as templates from "../templates";
+import { Expiration } from "@aws-cdk/core";
+
+const environment = process.env.ENVIRONMENT;
 
 export class ServerlessSurveyStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -34,20 +37,29 @@ export class ServerlessSurveyStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    const api = new GraphQLApi(this, "ServerlessSurvey", {
-      name: `ServerlessSurvey`,
+    const api = new GraphqlApi(this, "ServerlessSurvey", {
+      name: `ServerlessSurvey ${environment}`,
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
       },
-      schemaDefinitionFile: "./schema.graphql",
+      schema: Schema.fromAsset("./schema.graphql"),
+      authorizationConfig: {
+        defaultAuthorization: {
+          authorizationType: AuthorizationType.IAM
+        },
+        additionalAuthorizationModes: [
+          {
+            authorizationType: AuthorizationType.API_KEY,
+            apiKeyConfig: {
+              expires: Expiration.after(cdk.Duration.days(365))
+            }
+          }
+        ]
+      }
     });
-
-    // Hack: https://github.com/aws/aws-cdk/issues/7177
-    (api.node.defaultChild as CfnGraphQLApi).authenticationType = "AWS_IAM";
 
     const dataSource = api.addDynamoDbDataSource(
       "SurveyTableDataSoure",
-      "",
       surveyTable
     );
 
@@ -64,7 +76,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
       }
     );
 
-    functionSurveyByID.addDependsOn(api.schema);
+    api.addSchemaDependency(functionSurveyByID);
     functionSurveyByID.addDependsOn(dataSource.ds);
 
     const functionSurveyMultipleChoiceSubmit = new CfnFunctionConfiguration(
@@ -82,7 +94,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
       }
     );
 
-    functionSurveyMultipleChoiceSubmit.addDependsOn(api.schema);
+    api.addSchemaDependency(functionSurveyMultipleChoiceSubmit);
     functionSurveyMultipleChoiceSubmit.addDependsOn(dataSource.ds);
 
     const functionSurveyTextareaSubmit = new CfnFunctionConfiguration(
@@ -99,7 +111,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
       }
     );
 
-    functionSurveyTextareaSubmit.addDependsOn(api.schema);
+    api.addSchemaDependency(functionSurveyTextareaSubmit);
     functionSurveyTextareaSubmit.addDependsOn(dataSource.ds);
 
     const resolverQuerySurvey = new CfnResolver(this, "ResolverQuerySurvey", {
@@ -213,7 +225,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, "GraphQLEndpoint", {
-      value: api.graphQlUrl,
+      value: api.graphqlUrl,
     });
   }
 }

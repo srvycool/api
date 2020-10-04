@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "devDependencies": {
-    "@aws-cdk/assert": "^1.51.0",
+    "@aws-cdk/assert": "^1.66.0",
     "@types/crypto-js": "^4.0.0",
     "@types/jest": "^26.0.14",
     "@types/node": "14.11.2",
@@ -25,9 +25,9 @@
     "url": "^0.11.0"
   },
   "dependencies": {
-    "@aws-cdk/aws-appsync": "^1.52.0",
-    "@aws-cdk/aws-dynamodb": "^1.45.0",
-    "@aws-cdk/core": "^1.45.0",
+    "@aws-cdk/aws-appsync": "^1.66.0",
+    "@aws-cdk/aws-dynamodb": "^1.66.0",
+    "@aws-cdk/core": "^1.66.0",
     "source-map-support": "^0.5.16"
   }
 }
