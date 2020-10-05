@@ -68,36 +68,23 @@ export class ServerlessSurveyStack extends cdk.Stack {
 
     const proxy = new RestApi(this, `ServerlessSurvey ${environment}`);
     const proxyGraphqlEndpoint = proxy.root.addResource('graphql');
-    proxyGraphqlEndpoint.addCorsPreflight({
-      allowOrigins: Cors.ALL_ORIGINS,
-    });
 
-    const proxyServiceIntegration = new AwsIntegration({
-      service: 'appsync-api',
-      subdomain: Fn.select(0, Fn.split('.', Fn.select(1, Fn.split('https://', api.graphqlUrl)))),
-      path: 'graphql',
-      options: {
-        credentialsRole: proxyServiceIntegrationRole,
-        integrationResponses: [{
-          statusCode: '200',
-          responseTemplates: {
-            'application/json': ''
-          }
-        }]
-      }
-    });
-
-    proxyGraphqlEndpoint.addMethod('POST', proxyServiceIntegration, {
-      methodResponses: [
-        {
-          statusCode: '200', responseModels: {
-            'application/json': Model.EMPTY_MODEL
-          }
+    proxyGraphqlEndpoint.addMethod('ANY',
+      new AwsIntegration({
+        service: 'appsync-api',
+        subdomain: Fn.select(0, Fn.split('.', Fn.select(1, Fn.split('https://', api.graphqlUrl)))),
+        path: 'graphql',
+        integrationHttpMethod: 'ANY',
+        options: {
+          credentialsRole: proxyServiceIntegrationRole,
+          integrationResponses: [{
+            statusCode: '200',
+            responseTemplates: {
+              'application/json': ''
+            }
+          }]
         }
-      ]
-    });
-
-    proxyGraphqlEndpoint.addMethod('GET', proxyServiceIntegration, {
+      }), {
       methodResponses: [
         {
           statusCode: '200', responseModels: {
