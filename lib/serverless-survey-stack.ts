@@ -84,7 +84,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
           integrationResponses: [{
             statusCode: '200',
             responseParameters: {
-              'access-control-allow-origin': '\'*\''
+              'access-control-allow-origin': `'*'`
             },
             responseTemplates: {
               'application/json': ''
