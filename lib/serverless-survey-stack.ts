@@ -69,8 +69,8 @@ export class ServerlessSurveyStack extends cdk.Stack {
     const proxy = new RestApi(this, `ServerlessSurvey ${environment}`);
     const proxyGraphqlEndpoint = proxy.root.addResource('graphql');
 
-    proxyGraphqlEndpoint.addMethod('ANY',
-      new AwsIntegration({
+    proxyGraphqlEndpoint.addProxy({
+      defaultIntegration: new AwsIntegration({
         service: 'appsync-api',
         subdomain: Fn.select(0, Fn.split('.', Fn.select(1, Fn.split('https://', api.graphqlUrl)))),
         path: 'graphql',
@@ -84,14 +84,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
             }
           }]
         }
-      }), {
-      methodResponses: [
-        {
-          statusCode: '200', responseModels: {
-            'application/json': Model.EMPTY_MODEL
-          }
-        }
-      ]
+      })
     });
 
     const dataSource = api.addDynamoDbDataSource(
