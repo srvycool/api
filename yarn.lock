@@ -1139,10 +1139,10 @@ anymatch@^3.0.3:
     normalize-path "^3.0.0"
     picomatch "^2.0.4"
 
-appsync-template-tester@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/appsync-template-tester/-/appsync-template-tester-1.1.1.tgz#c42bbe71bd30e989aa747690f0697b7f9f9b938b"
-  integrity sha512-4FW7UIwD14hTPneWl2nD+9zA9gb6iQ8qC7pgz8OKjtRak4pv/Z9FPtePM2Q6H1nxsjINpAw1sD+5/lW1eLi6TQ==
+appsync-template-tester@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/appsync-template-tester/-/appsync-template-tester-1.1.4.tgz#04dc26ac7fdbc756a37966b794780481aa824937"
+  integrity sha512-Yz/z4152NMa+ATeBUC7HrxTzykJhlbCJaAP5+v0ikMCWuTYqG7k+LKD3UIXqiOV9//qmDJSlK4FNYWu55OXyrQ==
   dependencies:
     moment-timezone "^0.5.28"
     uuid "^8.0.0"
