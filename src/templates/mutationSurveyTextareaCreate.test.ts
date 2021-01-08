@@ -1,15 +1,15 @@
-jest.mock("uuid", () => ({ v4: () => "gg-hh-ii" }));
+jest.mock('uuid', () => ({ v4: () => 'gg-hh-ii' }));
 
-import Parser from "appsync-template-tester";
-import { request, response } from "./mutationSurveyTextareaCreate";
+import Parser from 'appsync-template-tester';
+import { request, response } from './mutationSurveyTextareaCreate';
 
-describe("templates:mutationSurveyTextareaCreate", () => {
-  describe("request", () => {
-    it("should match snapshot", () => {
+describe('templates:mutationSurveyTextareaCreate', () => {
+  describe('request', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(request);
       const context = {
         arguments: {
-          question: "How are you?",
+          question: 'How are you?',
         },
       };
 
@@ -17,12 +17,12 @@ describe("templates:mutationSurveyTextareaCreate", () => {
     });
   });
 
-  describe("response", () => {
-    it("should match snapshot", () => {
+  describe('response', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(response);
       const context = {
         result: {
-          id: "hh-ii-kk",
+          id: 'hh-ii-kk',
         },
       };
 

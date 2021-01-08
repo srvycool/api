@@ -1,13 +1,13 @@
-import Parser from "appsync-template-tester";
-import { request, response } from "./surveyTextareaSubmissions";
+import Parser from 'appsync-template-tester';
+import { request, response } from './surveyTextareaSubmissions';
 
-describe("templates:surveyTextareaSubmissions", () => {
-  describe("request", () => {
-    it("should match snapshot", () => {
+describe('templates:surveyTextareaSubmissions', () => {
+  describe('request', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(request);
       const context = {
         source: {
-          id: "aa-bb-cc",
+          id: 'aa-bb-cc',
         },
       };
 
@@ -15,14 +15,14 @@ describe("templates:surveyTextareaSubmissions", () => {
     });
   });
 
-  describe("response", () => {
-    it("should match snapshot", () => {
+  describe('response', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(response);
       const context = {
         result: {
           items: [
             {
-              id: "hh-ii-kk",
+              id: 'hh-ii-kk',
             },
           ],
         },

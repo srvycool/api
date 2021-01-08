@@ -1,4 +1,4 @@
-export const request = (tableName: string) => `
+export const request = (tableName: string): string => `
   #set($ctx.stash = {})
   $util.qr($ctx.stash.put("node", $util.autoId()))
 

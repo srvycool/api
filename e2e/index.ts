@@ -1,15 +1,16 @@
-import { notDeepStrictEqual } from "assert";
-import { surveyMultipleChoiceTest } from "./surveyMultipleChoice";
-import { surveyTextareaTest } from "./surveyTextarea";
-import { AppSyncClient } from "./utils/AppSyncClient";
+import { surveyMultipleChoiceTest } from './surveyMultipleChoice';
+import { surveyTextareaTest } from './surveyTextarea';
+import { AppSyncClient } from './utils/AppSyncClient';
 
 async function main() {
   const endpoint = process.env.ENDPOINT;
 
-  notDeepStrictEqual(endpoint, undefined, "process.env.ENDPOINT missing!");
+  if (!endpoint) {
+    throw new Error('process.env.ENDPOINT missing!');
+  }
 
   const client = new AppSyncClient({
-    endpoint: endpoint!,
+    endpoint: endpoint,
   });
 
   await Promise.all([

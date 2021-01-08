@@ -1,12 +1,12 @@
-import { AppSyncClient } from "./utils/AppSyncClient";
-import { deepEqual } from "assert";
+import { AppSyncClient } from './utils/AppSyncClient';
+import { deepEqual } from 'assert';
 
 interface SurveyTextareaCreate {
   surveyTextareaCreate: { id: string };
 }
 
 interface SurveyTextarea {
-  __typename: "SurveyTextarea";
+  __typename: 'SurveyTextarea';
   id: string;
   label: string;
   submissions: {
@@ -15,8 +15,8 @@ interface SurveyTextarea {
   }[];
 }
 
-const question = "How are you?";
-const submission = "Awesome!";
+const question = 'How are you?';
+const submission = 'Awesome!';
 
 async function create(client: AppSyncClient) {
   return client.request<SurveyTextareaCreate>(
@@ -31,11 +31,7 @@ async function create(client: AppSyncClient) {
   );
 }
 
-async function submit(
-  client: AppSyncClient,
-  surveyID: string,
-  text: string
-) {
+async function submit(client: AppSyncClient, surveyID: string, text: string) {
   return client.request<{ surveyTextareaSubmit: SurveyTextarea }>(
     `
     mutation SurveyTextareaSubmit($surveyID: ID!, $text: String!) {
@@ -75,11 +71,11 @@ async function query(client: AppSyncClient, surveyID: string) {
   );
 }
 
-export async function surveyTextareaTest(client: AppSyncClient) {
+export async function surveyTextareaTest(client: AppSyncClient): Promise<void> {
   const { surveyTextareaCreate } = await create(client);
   const { survey } = await query(client, surveyTextareaCreate.id);
 
-  deepEqual(survey.__typename, "SurveyTextarea");
+  deepEqual(survey.__typename, 'SurveyTextarea');
   deepEqual(survey.label, question);
 
   const { surveyTextareaSubmit } = await submit(client, survey.id, submission);

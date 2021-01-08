@@ -1,14 +1,14 @@
-import Parser from "appsync-template-tester";
-import { request, response } from "./mutationSurveyTextareaSubmit";
+import Parser from 'appsync-template-tester';
+import { request, response } from './mutationSurveyTextareaSubmit';
 
-describe("templates:mutationSurveyTextareaSubmit", () => {
-  describe("request", () => {
-    it("should match snapshot", () => {
+describe('templates:mutationSurveyTextareaSubmit', () => {
+  describe('request', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(request);
       const context = {
         arguments: {
-          surveyID: "aa-bb-cc?",
-          text: "Awesome!",
+          surveyID: 'aa-bb-cc?',
+          text: 'Awesome!',
         },
       };
 
@@ -16,12 +16,12 @@ describe("templates:mutationSurveyTextareaSubmit", () => {
     });
   });
 
-  describe("response", () => {
-    it("should match snapshot", () => {
+  describe('response', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(response);
       const context = {
         result: {
-          id: "hh-ii-kk",
+          id: 'hh-ii-kk',
         },
       };
 
