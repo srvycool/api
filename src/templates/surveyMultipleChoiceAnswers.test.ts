@@ -1,13 +1,13 @@
-import Parser from "appsync-template-tester";
-import { request, response } from "./surveyMultipleChoiceAnswers";
+import Parser from 'appsync-template-tester';
+import { request, response } from './surveyMultipleChoiceAnswers';
 
-describe("templates:surveyMultipleChoiceAnswers", () => {
-  describe("request", () => {
-    it("should match snapshot", () => {
+describe('templates:surveyMultipleChoiceAnswers', () => {
+  describe('request', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(request);
       const context = {
         source: {
-          id: "aa-bb-cc",
+          id: 'aa-bb-cc',
         },
       };
 
@@ -15,14 +15,14 @@ describe("templates:surveyMultipleChoiceAnswers", () => {
     });
   });
 
-  describe("response", () => {
-    it("should match snapshot", () => {
+  describe('response', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(response);
       const context = {
         result: {
           items: [
             {
-              id: "hh-ii-kk",
+              id: 'hh-ii-kk',
             },
           ],
         },

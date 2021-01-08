@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-import "source-map-support/register";
-import * as cdk from "@aws-cdk/core";
-import { ServerlessSurveyStack } from "./stacks/serverless-survey-stack";
+import 'source-map-support/register';
+import * as cdk from '@aws-cdk/core';
+import { ServerlessSurveyStack } from './stacks/serverless-survey-stack';
 
 const environment = process.env.ENVIRONMENT;
 
 if (!environment) {
-  throw new Error("Environment is missing!");
+  throw new Error('Environment is missing!');
 }
 
 const app = new cdk.App();
 new ServerlessSurveyStack(app, `ServerlessSurveyStack${environment}`, {
   environment,
   env: {
-    region: "eu-west-1",
+    region: 'eu-west-1',
   },
 });

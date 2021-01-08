@@ -1,18 +1,18 @@
-jest.mock("uuid", () => ({ v4: () => "gg-hh-ii" }));
+jest.mock('uuid', () => ({ v4: () => 'gg-hh-ii' }));
 
-import Parser, { Context } from "appsync-template-tester";
-import { request, response } from "./mutationSurveyMultipleChoiceCreate";
+import Parser, { Context } from 'appsync-template-tester';
+import { request, response } from './mutationSurveyMultipleChoiceCreate';
 
-const TABLE_NAME = "myFancyTable";
+const TABLE_NAME = 'myFancyTable';
 
-describe("templates:mutationSurveyMultipleChoiceCreate", () => {
-  describe("request", () => {
-    it("should match snapshot", () => {
+describe('templates:mutationSurveyMultipleChoiceCreate', () => {
+  describe('request', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(request(TABLE_NAME));
       const context = {
         arguments: {
-          question: "Coffee?",
-          answers: ["Yes", "No"],
+          question: 'Coffee?',
+          answers: ['Yes', 'No'],
         },
       } as Context;
 
@@ -20,15 +20,15 @@ describe("templates:mutationSurveyMultipleChoiceCreate", () => {
     });
   });
 
-  describe("response", () => {
-    it("should match snapshot", () => {
+  describe('response', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(response);
       const context = {
         stash: {
-          node: "aa-bb-cc",
+          node: 'aa-bb-cc',
         },
         arguments: {
-          question: "Coffee?",
+          question: 'Coffee?',
         },
       } as Context;
 

@@ -1,13 +1,13 @@
-import Parser, { Context } from "appsync-template-tester";
-import { request, response } from "./functionSurveyByID";
+import Parser, { Context } from 'appsync-template-tester';
+import { request, response } from './functionSurveyByID';
 
-describe("templates:functionSurveyByID", () => {
-  describe("request", () => {
-    it("should match snapshot", () => {
+describe('templates:functionSurveyByID', () => {
+  describe('request', () => {
+    it('should match snapshot', () => {
       const parser = new Parser(request);
       const context = {
         stash: {
-          surveyID: "aa-bb-cc",
+          surveyID: 'aa-bb-cc',
         },
       } as Context;
 
@@ -15,15 +15,15 @@ describe("templates:functionSurveyByID", () => {
     });
   });
 
-  describe("response", () => {
-    describe("surveyType is multiple choice", () => {
-      it("should match snapshot", () => {
+  describe('response', () => {
+    describe('surveyType is multiple choice', () => {
+      it('should match snapshot', () => {
         const parser = new Parser(response);
         const context = {
           result: {
-            id: "aa-bb-cc",
-            label: "Coffee?",
-            surveyType: "MULTIPLE_CHOICE",
+            id: 'aa-bb-cc',
+            label: 'Coffee?',
+            surveyType: 'MULTIPLE_CHOICE',
           },
         };
 
@@ -31,14 +31,14 @@ describe("templates:functionSurveyByID", () => {
       });
     });
 
-    describe("surveyType is textarea", () => {
-      it("should match snapshot", () => {
+    describe('surveyType is textarea', () => {
+      it('should match snapshot', () => {
         const parser = new Parser(response);
         const context = {
           result: {
-            id: "aa-bb-cc",
-            label: "How are you?",
-            surveyType: "TEXTAREA",
+            id: 'aa-bb-cc',
+            label: 'How are you?',
+            surveyType: 'TEXTAREA',
           },
         };
 

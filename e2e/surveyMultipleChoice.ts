@@ -1,12 +1,12 @@
-import { AppSyncClient } from "./utils/AppSyncClient";
-import { deepEqual } from "assert";
+import { AppSyncClient } from './utils/AppSyncClient';
+import { deepEqual } from 'assert';
 
 interface SurveyMultipleChoiceCreate {
   surveyMultipleChoiceCreate: { id: string };
 }
 
 interface SurveyMultipleChoice {
-  __typename: "SurveyMultipleChoice";
+  __typename: 'SurveyMultipleChoice';
   id: string;
   label: string;
   answers: {
@@ -16,7 +16,7 @@ interface SurveyMultipleChoice {
   }[];
 }
 
-const question = "Coffee?";
+const question = 'Coffee?';
 
 async function create(client: AppSyncClient) {
   return client.request<SurveyMultipleChoiceCreate>(
@@ -77,12 +77,14 @@ async function query(client: AppSyncClient, surveyID: string) {
   );
 }
 
-export async function surveyMultipleChoiceTest(client: AppSyncClient) {
+export async function surveyMultipleChoiceTest(
+  client: AppSyncClient
+): Promise<void> {
   const { surveyMultipleChoiceCreate } = await create(client);
 
   const { survey } = await query(client, surveyMultipleChoiceCreate.id);
 
-  deepEqual(survey.__typename, "SurveyMultipleChoice");
+  deepEqual(survey.__typename, 'SurveyMultipleChoice');
   deepEqual(survey.label, question);
 
   const { surveyMultipleChoiceSubmit } = await submit(
