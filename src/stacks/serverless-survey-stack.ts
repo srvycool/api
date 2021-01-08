@@ -1,82 +1,71 @@
 import * as cdk from "@aws-cdk/core";
-import {
-  GraphqlApi,
-  FieldLogLevel,
-  MappingTemplate,
-  CfnFunctionConfiguration,
-  CfnResolver,
-  AuthorizationType, Schema
-} from "@aws-cdk/aws-appsync";
-import {
-  Table,
-  AttributeType,
-  BillingMode,
-  StreamViewType,
-} from "@aws-cdk/aws-dynamodb";
+import * as appsync from "@aws-cdk/aws-appsync";
+import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import * as templates from "../templates";
-import { AwsIntegration, Cors, Model, RestApi } from "@aws-cdk/aws-apigateway";
-import { Policy, PolicyStatement, Role, ServicePrincipal } from "@aws-cdk/aws-iam";
-import { Fn } from "@aws-cdk/core";
+import * as apigateway from "@aws-cdk/aws-apigateway";
+import * as iam from "@aws-cdk/aws-iam";
 
-const environment = process.env.ENVIRONMENT;
+interface CustomProps extends cdk.StackProps {
+  environment: string;
+}
 
 export class ServerlessSurveyStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: cdk.Construct, id: string, props: CustomProps) {
     super(scope, id, props);
 
-    const surveyTable = new Table(this, "SurveyTable", {
+    const surveyTable = new dynamodb.Table(this, "SurveyTable", {
       partitionKey: {
         name: "node",
-        type: AttributeType.STRING,
+        type: dynamodb.AttributeType.STRING,
       },
       sortKey: {
         name: "path",
-        type: AttributeType.STRING,
+        type: dynamodb.AttributeType.STRING,
       },
-      billingMode: BillingMode.PAY_PER_REQUEST,
-      stream: StreamViewType.NEW_IMAGE,
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      stream: dynamodb.StreamViewType.NEW_IMAGE,
       serverSideEncryption: true,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    const api = new GraphqlApi(this, "ServerlessSurvey", {
-      name: `ServerlessSurvey ${environment}`,
+    const api = new appsync.GraphqlApi(this, "ServerlessSurvey", {
+      name: `ServerlessSurvey ${props.environment}`,
       logConfig: {
-        fieldLogLevel: FieldLogLevel.ALL,
+        fieldLogLevel: appsync.FieldLogLevel.ALL,
       },
-      schema: Schema.fromAsset("./schema.graphql"),
+      schema: appsync.Schema.fromAsset("./schema.graphql"),
       authorizationConfig: {
         defaultAuthorization: {
-          authorizationType: AuthorizationType.IAM
+          authorizationType: appsync.AuthorizationType.IAM
         },
       }
     });
 
-    const proxyServiceIntegrationPolicy = new Policy(this, `ServerlessSurvey Proxy Policy ${environment}`, {
+    const proxyServiceIntegrationPolicy = new iam.Policy(this, `ServerlessSurvey Proxy Policy ${props.environment}`, {
       statements: [
-        new PolicyStatement({
+        new iam.PolicyStatement({
           actions: ['appsync:GraphQL'],
           resources: [`${api.arn}/*`],
         }),
       ],
     });
 
-    const proxyServiceIntegrationRole = new Role(this, `ServerlessSurvey Proxy Role ${environment}`, {
-      assumedBy: new ServicePrincipal('apigateway.amazonaws.com'),
+    const proxyServiceIntegrationRole = new iam.Role(this, `ServerlessSurvey Proxy Role ${props.environment}`, {
+      assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
     });
     proxyServiceIntegrationRole.attachInlinePolicy(proxyServiceIntegrationPolicy)
 
-    const proxy = new RestApi(this, `ServerlessSurvey ${environment}`);
+    const proxy = new apigateway.RestApi(this, `ServerlessSurvey ${props.environment}`);
     const proxyGraphqlEndpoint = proxy.root.addResource('graphql');
 
     proxyGraphqlEndpoint.addCorsPreflight({
-      allowOrigins: Cors.ALL_ORIGINS
+      allowOrigins: apigateway.Cors.ALL_ORIGINS
     });
 
     proxyGraphqlEndpoint.addMethod('ANY',
-      new AwsIntegration({
+      new apigateway.AwsIntegration({
         service: 'appsync-api',
-        subdomain: Fn.select(0, Fn.split('.', Fn.select(1, Fn.split('https://', api.graphqlUrl)))),
+        subdomain: cdk.Fn.select(0, cdk.Fn.split('.', cdk.Fn.select(1, cdk.Fn.split('https://', api.graphqlUrl)))),
         path: 'graphql',
         integrationHttpMethod: 'ANY',
         options: {
@@ -99,7 +88,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
             'method.response.header.access-control-allow-origin': true
           },
           responseModels: {
-            'application/json': Model.EMPTY_MODEL
+            'application/json': apigateway.Model.EMPTY_MODEL
           },
         }
       ]
@@ -110,7 +99,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
       surveyTable
     );
 
-    const functionSurveyByID = new CfnFunctionConfiguration(
+    const functionSurveyByID = new appsync.CfnFunctionConfiguration(
       this,
       "FunctionSurveyByID",
       {
@@ -126,7 +115,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
     api.addSchemaDependency(functionSurveyByID);
     functionSurveyByID.addDependsOn(dataSource.ds);
 
-    const functionSurveyMultipleChoiceSubmit = new CfnFunctionConfiguration(
+    const functionSurveyMultipleChoiceSubmit = new appsync.CfnFunctionConfiguration(
       this,
       "FunctionSurveyMultipleChoiceSubmit",
       {
@@ -144,7 +133,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
     api.addSchemaDependency(functionSurveyMultipleChoiceSubmit);
     functionSurveyMultipleChoiceSubmit.addDependsOn(dataSource.ds);
 
-    const functionSurveyTextareaSubmit = new CfnFunctionConfiguration(
+    const functionSurveyTextareaSubmit = new appsync.CfnFunctionConfiguration(
       this,
       "FunctionSurveyTextareaSubmit",
       {
@@ -161,7 +150,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
     api.addSchemaDependency(functionSurveyTextareaSubmit);
     functionSurveyTextareaSubmit.addDependsOn(dataSource.ds);
 
-    const resolverQuerySurvey = new CfnResolver(this, "ResolverQuerySurvey", {
+    const resolverQuerySurvey = new appsync.CfnResolver(this, "ResolverQuerySurvey", {
       apiId: api.apiId,
       typeName: "Query",
       fieldName: "survey",
@@ -179,12 +168,12 @@ export class ServerlessSurveyStack extends cdk.Stack {
     dataSource.createResolver({
       typeName: "Mutation",
       fieldName: "surveyMultipleChoiceCreate",
-      requestMappingTemplate: MappingTemplate.fromString(
+      requestMappingTemplate: appsync.MappingTemplate.fromString(
         templates.mutationSurveyMultipleChoiceCreate.request(
           surveyTable.tableName
         )
       ),
-      responseMappingTemplate: MappingTemplate.fromString(
+      responseMappingTemplate: appsync.MappingTemplate.fromString(
         templates.mutationSurveyMultipleChoiceCreate.response
       ),
     });
@@ -192,10 +181,10 @@ export class ServerlessSurveyStack extends cdk.Stack {
     dataSource.createResolver({
       typeName: "SurveyMultipleChoice",
       fieldName: "answers",
-      requestMappingTemplate: MappingTemplate.fromString(
+      requestMappingTemplate: appsync.MappingTemplate.fromString(
         templates.surveyMultipleChoiceAnswers.request
       ),
-      responseMappingTemplate: MappingTemplate.fromString(
+      responseMappingTemplate: appsync.MappingTemplate.fromString(
         templates.surveyMultipleChoiceAnswers.response
       ),
     });
@@ -203,15 +192,15 @@ export class ServerlessSurveyStack extends cdk.Stack {
     dataSource.createResolver({
       typeName: "Mutation",
       fieldName: "surveyTextareaCreate",
-      requestMappingTemplate: MappingTemplate.fromString(
+      requestMappingTemplate: appsync.MappingTemplate.fromString(
         templates.mutationSurveyTextareaCreate.request
       ),
-      responseMappingTemplate: MappingTemplate.fromString(
+      responseMappingTemplate: appsync.MappingTemplate.fromString(
         templates.mutationSurveyTextareaCreate.response
       ),
     });
 
-    const resolverSurveyMultipleChoiceSubmit = new CfnResolver(
+    const resolverSurveyMultipleChoiceSubmit = new appsync.CfnResolver(
       this,
       "ResolverSurveyMultipleChoiceSubmit",
       {
@@ -237,7 +226,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
       functionSurveyMultipleChoiceSubmit
     );
 
-    const resolverSurveyTextAreaSubmit = new CfnResolver(
+    const resolverSurveyTextAreaSubmit = new appsync.CfnResolver(
       this,
       "ResolverSurveyTextareaSubmit",
       {
@@ -263,10 +252,10 @@ export class ServerlessSurveyStack extends cdk.Stack {
     dataSource.createResolver({
       typeName: "SurveyTextarea",
       fieldName: "submissions",
-      requestMappingTemplate: MappingTemplate.fromString(
+      requestMappingTemplate: appsync.MappingTemplate.fromString(
         templates.surveyTextareaSubmission.request
       ),
-      responseMappingTemplate: MappingTemplate.fromString(
+      responseMappingTemplate: appsync.MappingTemplate.fromString(
         templates.surveyTextareaSubmission.response
       ),
     });

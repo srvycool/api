@@ -1,9 +1,6 @@
 {
   "name": "serverless-survey",
   "version": "0.1.0",
-  "bin": {
-    "serverless-survey": "bin/serverless-survey.js"
-  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
