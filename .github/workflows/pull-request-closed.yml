@@ -17,14 +17,14 @@ jobs:
   destroy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Setup Node.js
-        uses: actions/setup-node@v1.1.0
+        uses: actions/setup-node@v2
         with:
-          version: 12
+          node-version: 12
       - name: Install dependencies
-        run: yarn
+        run: yarn --frozen-lockfile
       - name: Set ENVIRONMENT
-        run: echo "::set-env name=ENVIRONMENT::PullRequest$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
+        run: echo "ENVIRONMENT=PullRequest$(jq --raw-output .pull_request.number $GITHUB_EVENT_PATH)" >> $GITHUB_ENV
       - name: Destroy pull request test stack
         run: yarn cdk destroy --force
