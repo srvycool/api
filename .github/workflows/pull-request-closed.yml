@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          version: 12
+          node-version: 12
       - name: Install dependencies
         run: yarn --frozen-lockfile
       - name: Set ENVIRONMENT
