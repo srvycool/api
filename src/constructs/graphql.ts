@@ -3,15 +3,15 @@ import * as appsync from '@aws-cdk/aws-appsync';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
 import * as templates from '../templates';
 
-interface GraphQLStackProps extends cdk.StackProps {
+interface GraphQLProps {
   environment: string;
 }
 
-export class GraphQLStack extends cdk.NestedStack {
+export class GraphQL extends cdk.Construct {
   public url: string;
   public arn: string;
 
-  constructor(scope: cdk.Construct, id: string, props: GraphQLStackProps) {
+  constructor(scope: cdk.Construct, id: string, props: GraphQLProps) {
     super(scope, id);
 
     const surveyTable = new dynamodb.Table(this, 'SurveyTable', {

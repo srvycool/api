@@ -2,7 +2,7 @@ import * as cdk from '@aws-cdk/core';
 import * as apigateway from '@aws-cdk/aws-apigateway';
 import * as iam from '@aws-cdk/aws-iam';
 
-interface ProxyStackProps extends cdk.StackProps {
+interface ProxyProps {
   environment: string;
   graphqlApi: {
     url: string;
@@ -10,40 +10,31 @@ interface ProxyStackProps extends cdk.StackProps {
   };
 }
 
-export class ProxyStack extends cdk.NestedStack {
+export class Proxy extends cdk.Construct {
   public url: string;
 
-  constructor(scope: cdk.Construct, id: string, props: ProxyStackProps) {
+  constructor(scope: cdk.Construct, id: string, props: ProxyProps) {
     super(scope, id);
 
-    const proxyServiceIntegrationPolicy = new iam.Policy(
-      this,
-      `srvy.cool Proxy Policy ${props.environment}`,
-      {
-        statements: [
-          new iam.PolicyStatement({
-            actions: ['appsync:GraphQL'],
-            resources: [`${props.graphqlApi.arn}/*`],
-          }),
-        ],
-      }
-    );
+    const proxyServiceIntegrationPolicy = new iam.Policy(this, `ProxyPolicy`, {
+      statements: [
+        new iam.PolicyStatement({
+          actions: ['appsync:GraphQL'],
+          resources: [`${props.graphqlApi.arn}/*`],
+        }),
+      ],
+    });
 
-    const proxyServiceIntegrationRole = new iam.Role(
-      this,
-      `srvy.cool Proxy Role ${props.environment}`,
-      {
-        assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
-      }
-    );
+    const proxyServiceIntegrationRole = new iam.Role(this, `Proxy`, {
+      assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
+    });
     proxyServiceIntegrationRole.attachInlinePolicy(
       proxyServiceIntegrationPolicy
     );
 
-    const proxy = new apigateway.RestApi(
-      this,
-      `srvy.cool ${props.environment}`
-    );
+    const proxy = new apigateway.RestApi(this, `srvy.cool`, {
+      restApiName: `srvy.cool API ${props.environment}`,
+    });
     const proxyGraphqlEndpoint = proxy.root.addResource('graphql');
 
     proxyGraphqlEndpoint.addCorsPreflight({
@@ -93,7 +84,6 @@ export class ProxyStack extends cdk.NestedStack {
       }
     );
 
-    this.url =
-      'https://${proxy.restApiId}.execute-api.${this.region}.amazonaws.com/prod/graphql';
+    this.url = `${proxy.url}/prod/graphql`;
   }
 }

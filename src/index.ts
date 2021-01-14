@@ -1,12 +1,12 @@
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { ApiStack } from './api';
+import { ApiStack } from './stacks/api-stack';
 import { transformPascalCase } from './utils/transformPascalCase';
 
 const environment = process.env.ENVIRONMENT;
 
 if (!environment) {
-  throw new Error('Environment is missing!');
+  throw new Error('ENVIRONMENT is missing!');
 }
 
 const app = new cdk.App();
