@@ -120,7 +120,7 @@ jobs:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}-${{ env.CACHE_VERSION }}
       - name: Run e2e tests as smoke tests
-        run: make run-e2e
+        run: yarn e2e
 
   deploy-prod:
     runs-on: ubuntu-latest
