@@ -2,15 +2,16 @@ import * as cdk from '@aws-cdk/core';
 import * as appsync from '@aws-cdk/aws-appsync';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
 import * as templates from '../templates';
-import * as apigateway from '@aws-cdk/aws-apigateway';
-import * as iam from '@aws-cdk/aws-iam';
 
-interface CustomProps extends cdk.StackProps {
+interface GraphQLApiStackProps extends cdk.StackProps {
   environment: string;
 }
 
-export class ServerlessSurveyStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props: CustomProps) {
+export class GraphQLApiStack extends cdk.Stack {
+  public url: string;
+  public arn: string;
+
+  constructor(scope: cdk.Construct, id: string, props: GraphQLApiStackProps) {
     super(scope, id, props);
 
     const surveyTable = new dynamodb.Table(this, 'SurveyTable', {
@@ -40,83 +41,6 @@ export class ServerlessSurveyStack extends cdk.Stack {
         },
       },
     });
-
-    const proxyServiceIntegrationPolicy = new iam.Policy(
-      this,
-      `ServerlessSurvey Proxy Policy ${props.environment}`,
-      {
-        statements: [
-          new iam.PolicyStatement({
-            actions: ['appsync:GraphQL'],
-            resources: [`${api.arn}/*`],
-          }),
-        ],
-      }
-    );
-
-    const proxyServiceIntegrationRole = new iam.Role(
-      this,
-      `ServerlessSurvey Proxy Role ${props.environment}`,
-      {
-        assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
-      }
-    );
-    proxyServiceIntegrationRole.attachInlinePolicy(
-      proxyServiceIntegrationPolicy
-    );
-
-    const proxy = new apigateway.RestApi(
-      this,
-      `ServerlessSurvey ${props.environment}`
-    );
-    const proxyGraphqlEndpoint = proxy.root.addResource('graphql');
-
-    proxyGraphqlEndpoint.addCorsPreflight({
-      allowOrigins: apigateway.Cors.ALL_ORIGINS,
-    });
-
-    proxyGraphqlEndpoint.addMethod(
-      'ANY',
-      new apigateway.AwsIntegration({
-        service: 'appsync-api',
-        subdomain: cdk.Fn.select(
-          0,
-          cdk.Fn.split(
-            '.',
-            cdk.Fn.select(1, cdk.Fn.split('https://', api.graphqlUrl))
-          )
-        ),
-        path: 'graphql',
-        integrationHttpMethod: 'ANY',
-        options: {
-          credentialsRole: proxyServiceIntegrationRole,
-          integrationResponses: [
-            {
-              statusCode: '200',
-              responseParameters: {
-                'method.response.header.access-control-allow-origin': `'*'`,
-              },
-              responseTemplates: {
-                'application/json': '',
-              },
-            },
-          ],
-        },
-      }),
-      {
-        methodResponses: [
-          {
-            statusCode: '200',
-            responseParameters: {
-              'method.response.header.access-control-allow-origin': true,
-            },
-            responseModels: {
-              'application/json': apigateway.Model.EMPTY_MODEL,
-            },
-          },
-        ],
-      }
-    );
 
     const dataSource = api.addDynamoDbDataSource(
       'SurveyTableDataSoure',
@@ -288,8 +212,7 @@ export class ServerlessSurveyStack extends cdk.Stack {
       ),
     });
 
-    new cdk.CfnOutput(this, 'GraphQLEndpoint', {
-      value: `https://${proxy.restApiId}.execute-api.${this.region}.amazonaws.com/prod/graphql`,
-    });
+    this.url = api.graphqlUrl;
+    this.arn = api.arn;
   }
 }

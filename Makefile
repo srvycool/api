@@ -12,6 +12,6 @@ run-e2e:
 
 get-graphql-endpoint:
 	@aws cloudformation describe-stacks \
-		--stack-name "ServerlessSurveyStack${ENVIRONMENT}" \
+		--stack-name "ProxyStack${ENVIRONMENT}" \
 		--query 'Stacks[].Outputs[?OutputKey==`GraphQLEndpoint`].OutputValue' \
 		--output text
