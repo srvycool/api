@@ -1,6 +1,6 @@
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { ApiStack } from './stacks/api-stack';
+import { ApiStack } from './api';
 import { transformPascalCase } from './utils/transformPascalCase';
 
 const environment = process.env.ENVIRONMENT;

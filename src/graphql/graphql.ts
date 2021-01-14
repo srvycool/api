@@ -1,7 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import * as appsync from '@aws-cdk/aws-appsync';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
-import * as templates from '../templates';
+import * as vtl from './vtl';
 
 interface GraphQLProps {
   environment: string;
@@ -34,7 +34,7 @@ export class GraphQL extends cdk.Construct {
       logConfig: {
         fieldLogLevel: appsync.FieldLogLevel.ALL,
       },
-      schema: appsync.Schema.fromAsset('./src/schema.graphql'),
+      schema: appsync.Schema.fromAsset('./src/graphql/schema.graphql'),
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: appsync.AuthorizationType.IAM,
@@ -55,8 +55,8 @@ export class GraphQL extends cdk.Construct {
         dataSourceName: dataSource.name,
         functionVersion: '2018-05-29',
         name: 'FunctionSurveyByID',
-        requestMappingTemplate: templates.functionSurveyByID.request,
-        responseMappingTemplate: templates.functionSurveyByID.response,
+        requestMappingTemplate: vtl.functionSurveyByID.request,
+        responseMappingTemplate: vtl.functionSurveyByID.response,
       }
     );
 
@@ -71,10 +71,9 @@ export class GraphQL extends cdk.Construct {
         dataSourceName: dataSource.name,
         functionVersion: '2018-05-29',
         name: 'FunctionSurveyMultipleChoiceSubmit',
-        requestMappingTemplate:
-          templates.functionSurveyMultipleChoiceSubmit.request,
+        requestMappingTemplate: vtl.functionSurveyMultipleChoiceSubmit.request,
         responseMappingTemplate:
-          templates.functionSurveyMultipleChoiceSubmit.response,
+          vtl.functionSurveyMultipleChoiceSubmit.response,
       }
     );
 
@@ -89,9 +88,8 @@ export class GraphQL extends cdk.Construct {
         dataSourceName: dataSource.name,
         functionVersion: '2018-05-29',
         name: 'FunctionSurveyTextareaSubmit',
-        requestMappingTemplate: templates.functionSurveyTextareaSubmit.request,
-        responseMappingTemplate:
-          templates.functionSurveyTextareaSubmit.response,
+        requestMappingTemplate: vtl.functionSurveyTextareaSubmit.request,
+        responseMappingTemplate: vtl.functionSurveyTextareaSubmit.response,
       }
     );
 
@@ -109,8 +107,8 @@ export class GraphQL extends cdk.Construct {
         pipelineConfig: {
           functions: [functionSurveyByID.getAtt('FunctionId').toString()],
         },
-        requestMappingTemplate: templates.querySurvey.request,
-        responseMappingTemplate: templates.querySurvey.response,
+        requestMappingTemplate: vtl.querySurvey.request,
+        responseMappingTemplate: vtl.querySurvey.response,
       }
     );
 
@@ -121,12 +119,10 @@ export class GraphQL extends cdk.Construct {
       typeName: 'Mutation',
       fieldName: 'surveyMultipleChoiceCreate',
       requestMappingTemplate: appsync.MappingTemplate.fromString(
-        templates.mutationSurveyMultipleChoiceCreate.request(
-          surveyTable.tableName
-        )
+        vtl.mutationSurveyMultipleChoiceCreate.request(surveyTable.tableName)
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromString(
-        templates.mutationSurveyMultipleChoiceCreate.response
+        vtl.mutationSurveyMultipleChoiceCreate.response
       ),
     });
 
@@ -134,10 +130,10 @@ export class GraphQL extends cdk.Construct {
       typeName: 'SurveyMultipleChoice',
       fieldName: 'answers',
       requestMappingTemplate: appsync.MappingTemplate.fromString(
-        templates.surveyMultipleChoiceAnswers.request
+        vtl.surveyMultipleChoiceAnswers.request
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromString(
-        templates.surveyMultipleChoiceAnswers.response
+        vtl.surveyMultipleChoiceAnswers.response
       ),
     });
 
@@ -145,10 +141,10 @@ export class GraphQL extends cdk.Construct {
       typeName: 'Mutation',
       fieldName: 'surveyTextareaCreate',
       requestMappingTemplate: appsync.MappingTemplate.fromString(
-        templates.mutationSurveyTextareaCreate.request
+        vtl.mutationSurveyTextareaCreate.request
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromString(
-        templates.mutationSurveyTextareaCreate.response
+        vtl.mutationSurveyTextareaCreate.response
       ),
     });
 
@@ -166,10 +162,9 @@ export class GraphQL extends cdk.Construct {
             functionSurveyByID.getAtt('FunctionId').toString(),
           ],
         },
-        requestMappingTemplate:
-          templates.mutationSurveyMultipleChoiceSubmit.request,
+        requestMappingTemplate: vtl.mutationSurveyMultipleChoiceSubmit.request,
         responseMappingTemplate:
-          templates.mutationSurveyMultipleChoiceSubmit.response,
+          vtl.mutationSurveyMultipleChoiceSubmit.response,
       }
     );
 
@@ -192,9 +187,8 @@ export class GraphQL extends cdk.Construct {
             functionSurveyByID.getAtt('FunctionId').toString(),
           ],
         },
-        requestMappingTemplate: templates.mutationSurveyTextareaSubmit.request,
-        responseMappingTemplate:
-          templates.mutationSurveyTextareaSubmit.response,
+        requestMappingTemplate: vtl.mutationSurveyTextareaSubmit.request,
+        responseMappingTemplate: vtl.mutationSurveyTextareaSubmit.response,
       }
     );
 
@@ -205,10 +199,10 @@ export class GraphQL extends cdk.Construct {
       typeName: 'SurveyTextarea',
       fieldName: 'submissions',
       requestMappingTemplate: appsync.MappingTemplate.fromString(
-        templates.surveyTextareaSubmission.request
+        vtl.surveyTextareaSubmission.request
       ),
       responseMappingTemplate: appsync.MappingTemplate.fromString(
-        templates.surveyTextareaSubmission.response
+        vtl.surveyTextareaSubmission.response
       ),
     });
 
