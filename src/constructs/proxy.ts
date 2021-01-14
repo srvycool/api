@@ -84,6 +84,6 @@ export class Proxy extends cdk.Construct {
       }
     );
 
-    this.url = `${proxy.url}/prod/graphql`;
+    this.url = `${proxy.url}graphql`;
   }
 }
