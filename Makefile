@@ -5,7 +5,7 @@ export AWS_REGION=eu-west-1
 export ENVIRONMENT
 
 deploy:
-	yarn cdk deploy
+	yarn cdk deploy --all
 
 run-e2e:
 	ENDPOINT=$(shell make get-graphql-endpoint) yarn ts-node e2e
