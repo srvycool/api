@@ -101,7 +101,7 @@ jobs:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}-${{ env.CACHE_VERSION }}
       - name: Deploy instance
-        run: yarn cdk deploy --require-approval never -O outputs.json
+        run: yarn cdk deploy --require-approval never -O outputs.json --all
 
   smoke-tests:
     runs-on: ubuntu-latest
@@ -139,4 +139,4 @@ jobs:
           path: node_modules
           key: ${{ runner.OS }}-build-${{ hashFiles('yarn.lock') }}-${{ env.CACHE_VERSION }}
       - name: Deploy instance
-        run: yarn cdk deploy --require-approval never -O outputs.json
+        run: yarn cdk deploy --require-approval never -O outputs.json --all

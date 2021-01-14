@@ -1,7 +1,7 @@
-#!/usr/bin/env node
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { ServerlessSurveyStack } from './stacks/serverless-survey-stack';
+import { GraphQLApiStack } from './stacks/graphql-api-stack';
+import { ProxyStack } from './stacks/proxy-stack';
 
 const environment = process.env.ENVIRONMENT;
 
@@ -10,9 +10,15 @@ if (!environment) {
 }
 
 const app = new cdk.App();
-new ServerlessSurveyStack(app, `ServerlessSurveyStack${environment}`, {
+
+const api = new GraphQLApiStack(app, `GraphQLApiStack${environment}`, {
   environment,
-  env: {
-    region: 'eu-west-1',
+});
+
+new ProxyStack(app, `ProxyStack${environment}`, {
+  environment,
+  graphqlApi: {
+    url: api.url,
+    arn: api.arn,
   },
 });
