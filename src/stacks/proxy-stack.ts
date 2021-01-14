@@ -10,13 +10,15 @@ interface ProxyStackProps extends cdk.StackProps {
   };
 }
 
-export class ProxyStack extends cdk.Stack {
+export class ProxyStack extends cdk.NestedStack {
+  public url: string;
+
   constructor(scope: cdk.Construct, id: string, props: ProxyStackProps) {
-    super(scope, id, props);
+    super(scope, id);
 
     const proxyServiceIntegrationPolicy = new iam.Policy(
       this,
-      `ServerlessSurvey Proxy Policy ${props.environment}`,
+      `srvy.cool Proxy Policy ${props.environment}`,
       {
         statements: [
           new iam.PolicyStatement({
@@ -29,7 +31,7 @@ export class ProxyStack extends cdk.Stack {
 
     const proxyServiceIntegrationRole = new iam.Role(
       this,
-      `ServerlessSurvey Proxy Role ${props.environment}`,
+      `srvy.cool Proxy Role ${props.environment}`,
       {
         assumedBy: new iam.ServicePrincipal('apigateway.amazonaws.com'),
       }
@@ -40,7 +42,7 @@ export class ProxyStack extends cdk.Stack {
 
     const proxy = new apigateway.RestApi(
       this,
-      `ServerlessSurvey ${props.environment}`
+      `srvy.cool ${props.environment}`
     );
     const proxyGraphqlEndpoint = proxy.root.addResource('graphql');
 
@@ -91,8 +93,7 @@ export class ProxyStack extends cdk.Stack {
       }
     );
 
-    new cdk.CfnOutput(this, 'GraphQLEndpoint', {
-      value: `https://${proxy.restApiId}.execute-api.${this.region}.amazonaws.com/prod/graphql`,
-    });
+    this.url =
+      'https://${proxy.restApiId}.execute-api.${this.region}.amazonaws.com/prod/graphql';
   }
 }

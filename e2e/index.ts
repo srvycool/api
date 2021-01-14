@@ -13,7 +13,7 @@ async function main() {
   let endpoint;
   try {
     const cloudformation = new AWS.CloudFormation();
-    const stackName = `ProxyStack${environment}`;
+    const stackName = `SrvyCoolApi${environment}`;
     const stacks = await cloudformation
       .describeStacks({
         StackName: stackName,

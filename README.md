@@ -1,4 +1,4 @@
-# Serverless Survey
+# srvy.cool API
 
 This is a blank project for TypeScript development with CDK.
 

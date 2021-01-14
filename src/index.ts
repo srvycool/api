@@ -1,7 +1,7 @@
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { GraphQLApiStack } from './stacks/graphql-api-stack';
-import { ProxyStack } from './stacks/proxy-stack';
+import { ApiStack } from './api';
+import { transformPascalCase } from './utils/transformPascalCase';
 
 const environment = process.env.ENVIRONMENT;
 
@@ -11,14 +11,6 @@ if (!environment) {
 
 const app = new cdk.App();
 
-const api = new GraphQLApiStack(app, `GraphQLApiStack${environment}`, {
+new ApiStack(app, `SrvyCoolApi${transformPascalCase(environment)}`, {
   environment,
-});
-
-new ProxyStack(app, `ProxyStack${environment}`, {
-  environment,
-  graphqlApi: {
-    url: api.url,
-    arn: api.arn,
-  },
 });
