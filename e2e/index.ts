@@ -2,6 +2,7 @@ import AWS from 'aws-sdk';
 import { surveyMultipleChoiceTest } from './surveyMultipleChoice';
 import { surveyTextareaTest } from './surveyTextarea';
 import { AppSyncClient } from './utils/AppSyncClient';
+import { transformPascalCase } from './utils/transformPascalCase';
 
 async function main() {
   const environment = process.env.ENVIRONMENT;
@@ -13,7 +14,7 @@ async function main() {
   let endpoint;
   try {
     const cloudformation = new AWS.CloudFormation();
-    const stackName = `ProxyStack${environment}`;
+    const stackName = `SrvyCoolApi${transformPascalCase(environment)}`;
     const stacks = await cloudformation
       .describeStacks({
         StackName: stackName,

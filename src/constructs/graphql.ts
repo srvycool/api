@@ -3,16 +3,16 @@ import * as appsync from '@aws-cdk/aws-appsync';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
 import * as templates from '../templates';
 
-interface GraphQLApiStackProps extends cdk.StackProps {
+interface GraphQLProps {
   environment: string;
 }
 
-export class GraphQLApiStack extends cdk.Stack {
+export class GraphQL extends cdk.Construct {
   public url: string;
   public arn: string;
 
-  constructor(scope: cdk.Construct, id: string, props: GraphQLApiStackProps) {
-    super(scope, id, props);
+  constructor(scope: cdk.Construct, id: string, props: GraphQLProps) {
+    super(scope, id);
 
     const surveyTable = new dynamodb.Table(this, 'SurveyTable', {
       partitionKey: {
@@ -29,12 +29,12 @@ export class GraphQLApiStack extends cdk.Stack {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    const api = new appsync.GraphqlApi(this, 'ServerlessSurvey', {
-      name: `ServerlessSurvey ${props.environment}`,
+    const api = new appsync.GraphqlApi(this, 'srvy.cool', {
+      name: `srvy.cool ${props.environment}`,
       logConfig: {
         fieldLogLevel: appsync.FieldLogLevel.ALL,
       },
-      schema: appsync.Schema.fromAsset('./schema.graphql'),
+      schema: appsync.Schema.fromAsset('./src/schema.graphql'),
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: appsync.AuthorizationType.IAM,

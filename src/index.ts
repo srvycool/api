@@ -1,24 +1,16 @@
 import 'source-map-support/register';
 import * as cdk from '@aws-cdk/core';
-import { GraphQLApiStack } from './stacks/graphql-api-stack';
-import { ProxyStack } from './stacks/proxy-stack';
+import { ApiStack } from './stacks/api-stack';
+import { transformPascalCase } from './utils/transformPascalCase';
 
 const environment = process.env.ENVIRONMENT;
 
 if (!environment) {
-  throw new Error('Environment is missing!');
+  throw new Error('ENVIRONMENT is missing!');
 }
 
 const app = new cdk.App();
 
-const api = new GraphQLApiStack(app, `GraphQLApiStack${environment}`, {
+new ApiStack(app, `SrvyCoolApi${transformPascalCase(environment)}`, {
   environment,
-});
-
-new ProxyStack(app, `ProxyStack${environment}`, {
-  environment,
-  graphqlApi: {
-    url: api.url,
-    arn: api.arn,
-  },
 });
