@@ -1,6 +1,6 @@
 import * as cdk from '@aws-cdk/core';
-import { GraphQL } from '../constructs/graphql';
-import { Proxy } from '../constructs/proxy';
+import { GraphQL } from './graphql/graphql';
+import { Proxy } from './proxy/proxy';
 
 export interface ApiStackProps extends cdk.StackProps {
   environment: string;
