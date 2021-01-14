@@ -1,16 +1,34 @@
+import AWS from 'aws-sdk';
 import { surveyMultipleChoiceTest } from './surveyMultipleChoice';
 import { surveyTextareaTest } from './surveyTextarea';
 import { AppSyncClient } from './utils/AppSyncClient';
 
 async function main() {
-  const endpoint = process.env.ENDPOINT;
+  const environment = process.env.ENVIRONMENT;
 
-  if (!endpoint) {
-    throw new Error('process.env.ENDPOINT missing!');
+  if (!environment) {
+    throw new Error('process.env.ENVIRONMENT missing!');
+  }
+
+  let endpoint;
+  try {
+    const cloudformation = new AWS.CloudFormation();
+    const stackName = `ProxyStack${environment}`;
+    const stacks = await cloudformation
+      .describeStacks({
+        StackName: stackName,
+      })
+      .promise();
+
+    endpoint = stacks.Stacks![0].Outputs?.find(
+      (o) => o.OutputKey === 'GraphQLEndpoint'
+    )?.OutputValue;
+  } catch (e) {
+    throw new Error(`Couldn't fetch stack, Error : ${e}`);
   }
 
   const client = new AppSyncClient({
-    endpoint: endpoint,
+    endpoint,
   });
 
   await Promise.all([

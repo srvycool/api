@@ -119,4 +119,4 @@ jobs:
       - name: Deploy instance
         run: yarn cdk deploy --require-approval never -O outputs.json --all
       - name: Run e2e tests
-        run: make run-e2e
+        run: yarn e2e
