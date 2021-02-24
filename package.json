@@ -17,7 +17,7 @@
     "@typescript-eslint/eslint-plugin": "^4.15.2",
     "@typescript-eslint/parser": "^4.15.2",
     "appsync-template-tester": "^1.1.7",
-    "aws-cdk": "^1.90.1",
+    "aws-cdk": "^1.91.0",
     "aws-sdk": "^2.849.0",
     "cross-fetch": "^3.0.6",
     "eslint": "^7.20.0",
