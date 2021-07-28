@@ -13,7 +13,7 @@
     "@aws-cdk/assert": "^1.83.0",
     "@types/aws-sdk": "^2.7.0",
     "@types/jest": "^26.0.24",
-    "@types/node": "16.4.3",
+    "@types/node": "16.4.4",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.4",
     "appsync-template-tester": "^1.1.7",
