@@ -226,7 +226,7 @@
     "@aws-cdk/core" "1.83.0"
     constructs "^3.2.0"
 
-"@aws-cdk/aws-iam@1.83.0", "@aws-cdk/aws-iam@^1.83.0":
+"@aws-cdk/aws-iam@1.83.0":
   version "1.83.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/aws-iam/-/aws-iam-1.83.0.tgz#29d2734f08a387537e72d72c9b9ac842b7cb88d4"
   integrity sha512-lxZPIwLamUiKtaQSDRcVYbn5WbDsoecMqdTUvAL+Y4HRaVoWXHQ5zr+pHD/cDS+5kyv2/J5qGckwIOI7MaMDlQ==
@@ -234,6 +234,15 @@
     "@aws-cdk/core" "1.83.0"
     "@aws-cdk/region-info" "1.83.0"
     constructs "^3.2.0"
+
+"@aws-cdk/aws-iam@^1.102.0":
+  version "1.102.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/aws-iam/-/aws-iam-1.102.0.tgz#560ad32bc16115db3cfedd95574eebe9711937f2"
+  integrity sha512-rA+WtNT5g9ad3RZop9H4+bXd8U6LW9vP0P/Ko/zTQKPTRKv0Xm1kKyQtlRaKpj5rRxj4CgwAl7Dhr2ezWLEK6Q==
+  dependencies:
+    "@aws-cdk/core" "1.102.0"
+    "@aws-cdk/region-info" "1.102.0"
+    constructs "^3.3.69"
 
 "@aws-cdk/aws-kms@1.83.0":
   version "1.83.0"
@@ -444,7 +453,21 @@
     string-width "^4.2.0"
     table "^6.0.7"
 
-"@aws-cdk/core@1.83.0", "@aws-cdk/core@^1.83.0":
+"@aws-cdk/core@1.102.0", "@aws-cdk/core@^1.83.0":
+  version "1.102.0"
+  resolved "https://registry.yarnpkg.com/@aws-cdk/core/-/core-1.102.0.tgz#be815a168d317078e8d236daafda8fffd485355c"
+  integrity sha512-r4YHNTivzZ4xYSqQuH+FnDjU22fbJtSXyC8thDXy+oGXJfxJPZ3zQQM2oapLimpB1WokjFQdm7mHsIGulq/gFg==
+  dependencies:
+    "@aws-cdk/cloud-assembly-schema" "1.102.0"
+    "@aws-cdk/cx-api" "1.102.0"
+    "@aws-cdk/region-info" "1.102.0"
+    "@balena/dockerignore" "^1.0.2"
+    constructs "^3.3.69"
+    fs-extra "^9.1.0"
+    ignore "^5.1.8"
+    minimatch "^3.0.4"
+
+"@aws-cdk/core@1.83.0":
   version "1.83.0"
   resolved "https://registry.yarnpkg.com/@aws-cdk/core/-/core-1.83.0.tgz#17362c97b3d0f805fb0efceae3b64a22d0abbccb"
   integrity sha512-Oj+1eGRSng639vpAy+qUdG/rghMnXxFmLHcM37Hk2/Sgy5eCCzD0sEQnIbaQ9/RH8E8bgRJtAxyjdLthmSuLlw==
@@ -1942,10 +1965,10 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-constructs@^3.2.0:
-  version "3.2.98"
-  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.2.98.tgz#58c0c3b1cc16efd6c662dfc3f2dac25492b67864"
-  integrity sha512-7xCkvPl4TARfZgnwONm0jBkYZRWnbG5MdST6EKN219b0v/Ssly5RPee+VC24nYivABZL6yc4e1uygVhKgSdigA==
+constructs@^3.2.0, constructs@^3.3.69:
+  version "3.3.75"
+  resolved "https://registry.yarnpkg.com/constructs/-/constructs-3.3.75.tgz#222516951fd6b8380cb6fea3c171eeca0bf980a4"
+  integrity sha512-q10foASSSfDWmS99OQLfnWDXCzqLvoORISAVWPFg0AmIGlBv2ZdDOtXxLqrJARPxVlOldmW2JzWzdRI+4+0/ZA==
 
 convert-source-map@^1.4.0, convert-source-map@^1.6.0, convert-source-map@^1.7.0:
   version "1.7.0"
